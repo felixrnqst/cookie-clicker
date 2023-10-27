@@ -38,7 +38,7 @@ Run `yarn run build` and `yarn start` to run in production mode (The project has
 Each file created must have a comment explaining the author and what the file does, as follows: \n
 `
 /*
-example.js - created by Felix
+example.js - created by Felix\n
 This file explains naming conventions in this project
 */
 `
