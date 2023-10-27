@@ -1,34 +1,26 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Welcome to the Cookie Clicker Project!
 
-## Getting Started
+Get ready for an adventure filled with cookie-clicking excitement! 🍪🖱️
 
-First, run the development server:
+<div style="text-align: center;">
+  <img src="public/perfectCookie.png" width="128">
+</div>
 
-```bash
-npm run dev
-# or
-yarn dev
-```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## What's the Cookie Clicker Game?
 
-You can start editing the page by modifying `pages/index.js`. The page auto-updates as you edit the file.
+Cookie Clicker is no ordinary game; it's an addictive, delightful journey into the world of sweet, sugary treats. Your mission? Simple - click on a giant, delectable cookie to earn points. With each click, you're rewarded with more cookies, and the more cookies you have, the faster you can click. It's a cycle of endless cookie-clicking fun! 🎉
 
-[API routes](https://nextjs.org/docs/api-routes/introduction) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.js`.
+## Why It's Going to Be a Blast! 🚀
 
-The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/api-routes/introduction) instead of React pages.
+In this project, you and your team will have the chance to create your very own Cookie Clicker from scratch. You'll build a simple yet functional user interface in the Front-End, allowing players to indulge in some serious cookie-clicking action. On the Back-End, you'll handle the game's logic, track points, and make everything come to life.
 
-## Learn More
+But here's the best part: once you've mastered the basics, the sky's the limit! Add fun sound effects to every click, hide exciting Easter eggs, incorporate eye-catching visuals, and customize your Cookie Clicker to make it truly one-of-a-kind.
 
-To learn more about Next.js, take a look at the following resources:
+It's not just about code; it's about the sheer joy of creation and the thrill of watching your Cookie Clicker come to life. Get ready for a sweet, exciting, and, most importantly, fun journey! 🍪✨
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+So, are you ready to embark on this delightful adventure into the world of cookies and clicks? Let the cookie-clicking begin!
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+## Running the app
+The app is based on Next.js, which itself uses Node.js. To test the app locally, you need to have [node](https://nodejs.org/en/download/package-manager) and [yarn](https://classic.yarnpkg.com/lang/en/docs/install/#mac-stable) installed.
+Then cd into the directory and run `yarn run dev` to run in development mode.
