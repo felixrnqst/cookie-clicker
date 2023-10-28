@@ -36,12 +36,12 @@ Run `yarn run build` and `yarn start` to run in production mode (The project has
 
 ## Naming conventions
 Each file created must have a comment explaining the author and what the file does, as follows: \
-`
+```
 /*\
 example.js - created by Felix\
 This file explains naming conventions in this project\
 */
-`
+```
 
 ## Contributing code
 
