@@ -9,6 +9,7 @@ import Image from 'next/image'
 import styles from '../styles/Home.module.scss'
 
 import Header from '../components/header'
+import CookieBackground from '../components/cookie-background'
 import Counter from '../components/counter'
 import Cookie from '../components/cookie'
 
@@ -27,9 +28,12 @@ export default function Home() {
 
       <main className={styles.main}>
         <div className={styles.content}>
-          <Header/>
-          <Counter cookies={cookies}/>
-          <Cookie increment={increment}/>
+
+          <CookieBackground>
+            <Header/>
+            <Counter cookies={cookies}/>
+            <Cookie increment={increment}/>
+          </CookieBackground>
         </div>
         {/*<h1 className={styles.title}>
           Welcome to <a href="https://nextjs.org">Next.js!</a>

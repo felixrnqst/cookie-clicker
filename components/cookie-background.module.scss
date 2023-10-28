@@ -1,0 +1,15 @@
+$background1: yellow;
+$background2: orange;
+
+
+.background {position: absolute; width: 100%; height: 100vh; top: 0; z-index: 0;
+  background-image: repeating-conic-gradient($background1 0 9deg, $background2 9deg 18deg);
+  animation: animate-rotate 2s infinite ;
+}
+@keyframes animate-rotate {
+  @for $pos from 1 through 100 {
+    $i: calc($pos / 100 * 18);
+
+    #{$pos}% {background-image: repeating-conic-gradient($background1 #{$i}deg #{$i+9}deg, $background2 #{$i+9}deg #{$i+18}deg);}
+  }
+}
