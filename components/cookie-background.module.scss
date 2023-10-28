@@ -1,11 +1,23 @@
+@import '../styles/constants.scss';
+
 $background1: yellow;
 $background2: orange;
 
 
-.background {position: absolute; width: 100%; height: 100vh; top: 0; z-index: 0;
+.background {height: 100vh; width: 100vw; top: 0; z-index: 0; position: relative; 
   background-image: repeating-conic-gradient($background1 0 9deg, $background2 9deg 18deg);
-  animation: animate-rotate 2s infinite ;
+  animation: animate-rotate 4s infinite ;
 }
+
+@include bp(md){
+  .background {width: 50vw;}
+}
+
+@include bp(lg){
+  .background {width: 60vw;}
+}
+
+
 @keyframes animate-rotate {
   @for $pos from 1 through 100 {
     $i: calc($pos / 100 * 18);

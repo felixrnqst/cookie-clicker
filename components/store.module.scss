@@ -1,0 +1,11 @@
+@import '../styles/constants.scss';
+
+.container {width: 100vw; height: 100vh; background: white;}
+
+@include bp(md){
+  .container {width: 50vw;}
+}
+
+@include bp(lg){
+  .container {width: 40vw;}
+}

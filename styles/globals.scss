@@ -17,7 +17,7 @@ a {
 
 h3 {text-align: center; }
 
-@media (prefers-color-scheme: dark) {
+@media (prefers-color-scheme: dark) {//Dark mode support
   html {
     color-scheme: dark;
   }
