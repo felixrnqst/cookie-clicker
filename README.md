@@ -29,20 +29,20 @@ Run `yarn run dev` to run in development mode.
 Run `yarn run build` and `yarn start` to run in production mode (The project has to be built first).
 
 ## Project organisation
-`/pages`: The web pages which are served, for example `/pages/cookie.js` can be visited at `example.com/cookie`.
-`/pages/api`: This is where APIs are run on every visit.
-`/components`: This is where components for pages are stored.
-`/styles`: This is where CSS (for styling pages and components) are stored.
+`/pages`: The web pages which are served, for example `/pages/cookie.js` can be visited at `example.com/cookie`.\
+`/pages/api`: This is where APIs are run on every visit.\
+`/components`: This is where components for pages are stored.\
+`/styles`: This is where CSS (for styling pages and components) are stored.\
 
 ## Naming conventions
-Each file created must have a comment explaining the author and what the file does, as follows: \n
+Each file created must have a comment explaining the author and what the file does, as follows: \
 `
-/*
-example.js - created by Felix\n
-This file explains naming conventions in this project
+/*\
+example.js - created by Felix\
+This file explains naming conventions in this project\
 */
 `
 
 ## Contributing code
 
-Before committing code, you /must/ make sure that it runs properly, to avoid submitting buggy code to the repository.
+Before committing code, you *must* make sure that it runs and builds properly, using `yarn run build`, to avoid submitting buggy code to the repository.
