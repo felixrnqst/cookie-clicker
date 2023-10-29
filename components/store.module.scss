@@ -1,6 +1,9 @@
 @import '../styles/constants.scss';
 
-.container {width: 100vw; height: 100vh; background: white;}
+.container {width: 100vw; height: 100vh; background: #3d1601;
+  border-left: .5rem solid #782c00;
+  * {color: white; }
+}
 
 @include bp(md){
   .container {width: 50vw;}
@@ -8,4 +11,8 @@
 
 @include bp(lg){
   .container {width: 40vw;}
+}
+
+.storeItem {padding: .5rem;
+  border-bottom: 2px solid black; 
 }

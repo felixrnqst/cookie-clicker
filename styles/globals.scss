@@ -13,6 +13,7 @@ a {
 
 * {
   box-sizing: border-box;
+  font-family: Minecraft;
 }
 
 h3 {text-align: center; }
@@ -26,3 +27,5 @@ h3 {text-align: center; }
     background: white;
   }
 }
+
+@font-face {font-family: 'Minecraft'; font-display: swap; font-style:  normal; font-weight: 100; font-display: swap; src: url("../fonts/minecraft.ttf") format("truetype"); }

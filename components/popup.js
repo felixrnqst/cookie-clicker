@@ -1,5 +1,5 @@
 /*
-index.js - Created by Guillaume
+popup.js - Created by Guillaume
 This create the inital popup for the user to choose saving his progress or not
 */
 import React from "react";

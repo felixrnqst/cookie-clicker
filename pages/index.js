@@ -17,15 +17,19 @@ import Popup from '../components/popup'
 
 export default function Home() {
   const [cookies, setCookies] = useState(0)
+  const [buttonPopup, setButtonPopup] = useState(false)
+
   const updateInterval = useRef()
   const updateOverride = useRef(false)
-  const [buttonPopup, setbuttonPopup] = useState(true)
 
   useEffect(() => {// useEffect is run only once when the component is mounted
-    window.cookies = cookies //We want to use window.cookies to be able to "hack" the game in the console
+    setButtonPopup(localStorage.getItem("buttonPopup") !== null ? localStorage.getItem("buttonPopup") == 'true' : true);
+    var c  = localStorage.getItem("cookies") !== null ? parseInt(localStorage.getItem("cookies")) : 0
+    window.cookies = c //We want to use window.cookies to be able to "hack" the game in the console
+    setCookies(c)
     updateInterval.current = setInterval(() => {
       if(window.cookies != cookies && !updateOverride.current){
-        setCookies(window.cookies);
+        setCookiesLocal(window.cookies);
       }
     }, 1000/60)
   }, [])
@@ -37,13 +41,22 @@ export default function Home() {
 
   function increment(){
     updateOverride.current = true;
-    setCookies((c) => c+1)
+    setCookies((c) => {
+      localStorage.setItem("cookies", c+1);
+      return c+1
+    })
 
   }
 
+  function setButtonPopupLocal(i){//Save choice to localStorage so that the popup isn't shown every time
+    setButtonPopup(i)
+    localStorage.setItem("buttonPopup", i ? 'true' : 'false');
 
-
-  //Window.cookies
+  }
+  function setCookiesLocal(i){
+    setCookies(i)
+    localStorage.setItem("cookies", i);
+  }
 
   return (
     <div className={styles.container}>
@@ -58,14 +71,14 @@ export default function Home() {
           <Header/>
           <Counter cookies={cookies}/>
           <Cookie increment={increment}/>
-          <Popup trigger={buttonPopup} setTrigger={setbuttonPopup}/>
+          <Popup trigger={buttonPopup} setTrigger={setButtonPopupLocal}/>
         </CookieBackground>
         <Store/>
 
       </main>
 
       <footer className={styles.footer}>
-        <a>Built by Felix, Guillaume, Étienne and Matthieu</a>
+        <a>Built by Felix, Guillaume, Etienne and Matthieu</a>
       </footer>
     </div>
   )
