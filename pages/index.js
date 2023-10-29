@@ -13,11 +13,13 @@ import CookieBackground from '../components/cookie-background'
 import Counter from '../components/counter'
 import Cookie from '../components/cookie'
 import Store from '../components/store'
+import Popup from '../components/popup'
 
 export default function Home() {
   const [cookies, setCookies] = useState(0)
   const updateInterval = useRef()
   const updateOverride = useRef(false)
+  const [buttonPopup, setbuttonPopup] = useState(true)
 
   useEffect(() => {// useEffect is run only once when the component is mounted
     window.cookies = cookies //We want to use window.cookies to be able to "hack" the game in the console
@@ -56,6 +58,7 @@ export default function Home() {
           <Header/>
           <Counter cookies={cookies}/>
           <Cookie increment={increment}/>
+          <Popup trigger={buttonPopup} setTrigger={setbuttonPopup}/>
         </CookieBackground>
         <Store/>
 
