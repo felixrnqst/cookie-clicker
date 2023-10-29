@@ -9,35 +9,32 @@ import { useState, useEffect, useRef } from 'react'
 import Image from 'next/image'
 import cookie from '../public/cookie.png'
 
-import { motion } from 'framer-motion'
+import { motion, useAnimate } from 'framer-motion'
 
 export default function Cookie(props){
   const [click, setClick] = useState(false);
   const [coords, setCoords] = useState([0,0]);
+
   const mouseListener = useRef();
 
-  // useEffect(() => {
-  //   mouseListener = document.addEventListener('mousemove', (e) => {
-  //     console.log(e.mouseX, e.mouseY)
-  //   })
-  //   return () => {
-  //
-  //   }
-  // })
+  const [scope, animate] = useAnimate()
 
-
-  function tapHandler(e){
+  async function tapHandler(e){
     // console.log(e)
     setCoords([e.clientX, e.clientY])
     setClick(true);
     setTimeout(() => setClick(false), 100)
     props.increment()
+    await animate(scope.current, { opacity: 1, transform: 'translateX(-50%) translateY(-50%)' }, { duration: 0 })
+    await animate(scope.current, { opacity: 0, transform: 'translateX(-50%) translateY(-5rem)'}, { duration: 1 })
+
   }
 
   return (
   <div className={styles.container}>
-    <div className={styles.cursor}/>
+    <div className={styles.cursor} style={{top: coords[1], left: coords[0]}} ref={scope}>+1</div>
     <motion.div
+      className={styles.hoverbox}
       whileHover={{
         scale: 0.9,
         transition: { duration: 0.2 },
