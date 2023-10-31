@@ -29,7 +29,7 @@ export default function Home() {
     setCookies(c)
     updateInterval.current = setInterval(() => {
       if(window.cookies != cookies && !updateOverride.current){
-        setCookiesLocal(window.cookies);
+        setCookies(window.cookies);
       }
     }, 1000/60)
   }, [])
@@ -37,7 +37,12 @@ export default function Home() {
   useEffect(() => {
     updateOverride.current = false;
     window.cookies = cookies
+    localStorage.setItem("cookies", cookies);
   }, [cookies])
+
+  useEffect(() => {
+    localStorage.setItem("buttonPopup", buttonPopup ? 'true' : 'false');//Saves to localstorage to avoid having to see the dialog on every page load
+  }, [buttonPopup])
 
   function increment(){
     updateOverride.current = true;
@@ -48,20 +53,9 @@ export default function Home() {
 
   }
 
-  function setButtonPopupLocal(i){//Save choice to localStorage so that the popup isn't shown every time
-    setButtonPopup(i)
-    localStorage.setItem("buttonPopup", i ? 'true' : 'false');
-
-  }
-  function setCookiesLocal(i){
-    setCookies(i)
-    localStorage.setItem("cookies", i);
-  }
-
   return (
     <div className={styles.container}>
       <Head>
-        <title>{cookies} Cookies</title>
         <meta name="description" content="Online cookie clicker game" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
@@ -71,9 +65,9 @@ export default function Home() {
           <Header/>
           <Counter cookies={cookies}/>
           <Cookie increment={increment}/>
-          <Popup trigger={buttonPopup} setTrigger={setButtonPopupLocal}/>
+          <Popup trigger={buttonPopup} setTrigger={setButtonPopup}/>
         </CookieBackground>
-        <Store/>
+        <Store cookies={cookies} setCookies={setCookies}/>
 
       </main>
 
