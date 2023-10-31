@@ -13,8 +13,11 @@ const upgrades = [
   {name: 'Bakery', description: 'An artisanal bakery that produces fresh cookies', price: 200, quantitiy: 0, max: -1, cps: 1},
 ]
 
+// There's surely better way to use storeState variable in other files (account.js here) but I only find this way...
+export const ActualStoreState = Object.fromEntries(upgrades.map(i => [i.name, 0]));
+
 export default function Store(props){
-  const [storeState, setStoreState] = useState(Object.fromEntries(upgrades.map(i => [i.name, 0])))
+  const [storeState, setStoreState] = useState(ActualStoreState);
 
   function increment(i){
     var u = upgrades.filter(k => k.name == i)[0]
