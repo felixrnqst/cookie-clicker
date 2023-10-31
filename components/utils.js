@@ -1,7 +1,13 @@
+/*
+utils.js - Created by Guillaume
+This group usefuls functions and functions to interact with supabase DB
+*/
+
 import supabase from "supabase";
 
 export function handlePageClose(storeState, code) {
-    // TODO : ADD ALSO LISTENER WHEN PAGE REFRESH
+    // TODO : ADD ALSO LISTENER WHEN PAGE CLOSE
+    // Works when refresh page but not when page was closed by user.
     window.addEventListener('beforeunload', async function(event) {
       await savePlayerProgress(storeState, code)
     });
