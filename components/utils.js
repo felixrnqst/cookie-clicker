@@ -16,6 +16,7 @@ export function handlePageClose(storeState, code) {
 
 export async function savePlayerProgress(storeState, code) {
     if (code != "") {
+      console.log('Saving...')
     const { error } = await supabase
     .from('cookie')
     .update({ "cookies" : window.cookies,

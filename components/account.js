@@ -19,7 +19,7 @@ export default function Account (props) {
   const [success, setSuccess] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
   // TODO Find better way to save and sync data with the DB
-  const save_delay = 4;
+  const save_delay = 4; // Save user data to DB every 4 seconds
 
 
   function retreive_account_data(data) {
@@ -39,13 +39,13 @@ export default function Account (props) {
   function startNewSavedGame() {
     console.log(`Adding user_code ${random_code} to DB...`);
     addNewPlayerToDB(random_code, props.storeState);
-    props.setUserCode(random_code)
-    props.setCookies(0)
+    props.setUserCode(random_code);
+    props.setCookies(0);
     setInterval(() => {
       savePlayerProgress(props.storeState, random_code);
     }, save_delay * 1000); // save_delay in seconds
-    setShowAccount(false);
 
+    setShowAccount(false);
     // Listener to save user data when he leaves the website
     handlePageClose(props.storeState, random_code)
   }
