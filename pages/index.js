@@ -19,6 +19,8 @@ import Popup from '../components/popup'
 export default function Home() {
   const [cookies, setCookies] = useState(0);
   const [buttonPopup, setButtonPopup] = useState(false)
+  const [userCode, setUserCode] = useState('')
+
 
   const updateInterval = useRef()
   const updateOverride = useRef(false)
@@ -63,10 +65,10 @@ export default function Home() {
 
       <main className={styles.main}>
         <CookieBackground>
-          <Header/>
+          <Header userCode={userCode}/>
           <Counter cookies={cookies}/>
           <Cookie increment={increment}/>
-          <Popup trigger={buttonPopup} setTrigger={setButtonPopup}/>
+          <Popup setCookies={setCookies} trigger={buttonPopup} setTrigger={setButtonPopup} setUserCode={setUserCode}/>
         </CookieBackground>
         <Store cookies={cookies} setCookies={setCookies}/>
 

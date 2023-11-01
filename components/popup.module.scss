@@ -2,7 +2,7 @@
     position: fixed;
     top: 0;
     left: 0;
-    width: 100%;
+    width: 100vw;
     height: 100vh;
     background-color: rgba(0, 0, 0, 0.2);
 
@@ -12,11 +12,11 @@
 }
 
 .popup_inner {
-    border-radius: 5%;
+    border-radius: 2rem;
     position: fixed;
-    padding: 32px;
+    padding: 1rem;
     width: 50vw;
-    height: 30vw;
+    // height: 30vw;
     background-color: #fff;
 }
 
@@ -25,9 +25,9 @@
 .popup_inner .close {
     display: flex;
     justify-content: flex-end;
-    
+
 }
-  
+
 .popup_inner .close button {
     background-color: rgb(255, 0, 0);
     border: none;
@@ -47,7 +47,24 @@
     justify-content: center;
     align-items: center;
 }
-  
+
+.float_container {
+    border: 3px solid #fff;
+    padding: 20px;
+}
+
+.float_child {
+    width: 50%;
+    float: right;
+    padding: 10px;
+    padding-right: 10px;
+    border: 2px solid red;
+}
+
+.popup_inner .login_input {
+    color: white;
+}
+
 .popup_inner .popupfooter button {
     width: 150px;
     height: 45px;
@@ -58,5 +75,10 @@
     border-radius: 8px;
     font-size: 20px;
     cursor: pointer;
+
+}
+
+.code_input {
+    justify-content: left;
 
 }

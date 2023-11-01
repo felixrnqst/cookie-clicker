@@ -4,7 +4,7 @@ This create the inital popup for the user to choose saving his progress or not
 */
 import React, { useState } from "react";
 import styles from './popup.module.scss';
-import Acccount from './account'
+import Account from './account'
 
 
 // The close button is temporary for development
@@ -12,16 +12,14 @@ export default function Popup(props) {
   const [showPopup, setShowPopup] = useState(true);
   const [showAccountPopup, setShowAccountPopup] = useState(false);
 
-  // I don't understand why function doesn't why here
-  // I must use arrow functions :/
-  const SavingButtonClickEvent = () => {
+  function localClick(){
     setShowPopup(false);
     setShowAccountPopup(true);
-  };
+  }
 
-  const LocallyButtonClickEvent = () => {
+  function saveClick(){
     setShowPopup(false);
-  };
+  }
 
   return showPopup ? (
     <div className={styles.popup}>
@@ -33,13 +31,12 @@ export default function Popup(props) {
           <h1>Choose your gamestyle :</h1>
         </div>
         <div className={styles.popupfooter}>
-          <button onClick={LocallyButtonClickEvent}>Locally (No Saving)</button>
-          <button onClick={SavingButtonClickEvent}>Online (Saving)</button>
+          <button onClick={localClick}>Locally (No Saving)</button>
+          <button onClick={saveClick}>Online (Saving)</button>
         </div>
       </div>
     </div>
   ) : showAccountPopup ? (
-    <Acccount setTrigger={setShowAccountPopup}/>
+    <Account setTrigger={setShowAccountPopup} setCookies={props.setCookies} setUserCode={props.setUserCode}/>
   ) : "";
 }
-

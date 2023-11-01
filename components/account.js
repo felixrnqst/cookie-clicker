@@ -1,9 +1,9 @@
 /*
 account.js - Created by Guillaume
-This create the popup for the user either to create new account or enter his account informations
+This creates the popup for the user either to create new account or enter their account information
 */
 import React, { useState, useEffect } from "react";
-import styles from './account.module.scss';
+import styles from './popup.module.scss'; //Uses the same styles as for the pop-up
 import supabase from "supabase";
 import { addNewPlayerToDB } from "./utils";
 import { customAlphabet } from 'nanoid';
@@ -17,13 +17,11 @@ const nanoid = customAlphabet(alphabet, 6);
 const random_code = parseInt(nanoid());
 
 
-export default function Acccount (props) {
+export default function Account (props) {
   const [showAccount, setShowAccount] = useState(true);
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
-  const [userCode, setUserCode] = useState('');
-
 
 
   function retreive_account_data(data) {
@@ -31,15 +29,15 @@ export default function Acccount (props) {
     console.log(data)
     window.cookies = data.cookies
     localStorage.setItem("cookies", data.cookies);
-    
-    
+
+
   }
 
   function startNewSavedGame() {
     console.log(`Adding user_code ${random_code} to DB...`);
     addNewPlayerToDB(random_code);
-    setUserCode(random_code)
-    // TODO SET COOKIES TO 0 (using setCookies(0) from index.js i suppose but I can't make it working...)
+    props.setUserCode(random_code)
+    props.setCookies(0) // DONE: Set cookies to 0
     setShowAccount(false);
 
     // Listener to save user data when he leaves the website
@@ -67,13 +65,13 @@ export default function Acccount (props) {
 
       const isValidCode = !!data;
       if (isValidCode) {
-        // Listener to save user data when he leaves the website
+        // Listener to save user data when they leave the website
         handlePageClose(ActualStoreState, code)
-        setUserCode(code)
+        props.setUserCode(code)
         setSuccess(isValidCode);
         retreive_account_data(data)
       }
-      
+
       }
     } catch (error) {
       setErrorMessage("Wrong Code !");
@@ -84,14 +82,14 @@ export default function Acccount (props) {
   };
 
   return showAccount ? (
-    <div className={styles.account_popup}>
-      <div className={styles.account_popup_inner}>
+    <div className={styles.popup}>
+      <div className={styles.popup_inner}>
         <div className={styles.close}>
           <button onClick={() => { props.setTrigger(false); }}>X</button>
         </div>
-        
+
         <div className={styles.popupfooter}></div>
-        
+
         <div className={styles.float_container}>
           <div className={styles.float_child}>
             <div className={styles.title}>
@@ -102,7 +100,7 @@ export default function Acccount (props) {
             <h2>{random_code}</h2>
             <button onClick={() => { startNewSavedGame() }}>Start</button>
           </div>
-          
+
           <div className={styles.float_child}>
             <div className={styles.title}>
               <h2>Restart from your progress :</h2>
@@ -126,4 +124,3 @@ export default function Acccount (props) {
     </div>
   ) : "";
 };
-

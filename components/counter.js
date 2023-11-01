@@ -32,7 +32,7 @@ export default function Counter({cookies}){
   return (
     <>
       <Head>
-        <title>{prettyDisplay(cookies)} {cookies != 1 ? 'cookies' : 'cookie'}</title>
+        <title>{prettyDisplay(cookies) + (cookies != 1 ? ' cookies' : ' cookie')}</title>
       </Head>
       <h3 style={{fontVariantNumeric: 'tabular-nums', fontSize: '1.6rem'}}>{prettyDisplay(cookies)} {cookies != 1 ? 'cookies' : 'cookie'}</h3>
     </>
