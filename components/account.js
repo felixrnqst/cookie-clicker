@@ -9,9 +9,6 @@ import { addNewPlayerToDB } from "./utils";
 import { customAlphabet } from 'nanoid';
 import { handlePageClose } from "../components/utils"
 
-import { ActualStoreState } from "./store";
-import { setCookies } from "../pages/index"
-
 const alphabet = '0123456789';
 const nanoid = customAlphabet(alphabet, 6);
 const random_code = parseInt(nanoid());
@@ -26,22 +23,27 @@ export default function Account (props) {
 
   function retreive_account_data(data) {
     setShowAccount(false);
-    console.log(data)
     window.cookies = data.cookies
     localStorage.setItem("cookies", data.cookies);
+    // Recover all upgrade of user
+    for (let upgrade_name in props.storeState) {
+      props.setStoreState(s => {
+        s[upgrade_name] = data.upgrades[upgrade_name];
+        return s})
+    }
 
 
   }
 
   function startNewSavedGame() {
     console.log(`Adding user_code ${random_code} to DB...`);
-    addNewPlayerToDB(random_code);
+    addNewPlayerToDB(random_code, props.storeState);
     props.setUserCode(random_code)
     props.setCookies(0) // DONE: Set cookies to 0
     setShowAccount(false);
 
     // Listener to save user data when he leaves the website
-    handlePageClose(ActualStoreState, random_code)
+    handlePageClose(props.storeState, random_code)
   }
 
   async function login(code) {
@@ -52,6 +54,7 @@ export default function Account (props) {
     }
 
     try {
+      setErrorMessage("")
       setLoading(true);
       const { data, error } = await supabase
         .from('cookie')
@@ -59,23 +62,31 @@ export default function Account (props) {
         .eq("code", code)
         .single();
       if (error) {
-        setErrorMessage("Wrong Code !");
-        console.log(error);
+        if (error.message == "TypeError: NetworkError when attempting to fetch resource.") {
+          setErrorMessage("Bad Internet Connection !" );
+        } else {
+          setErrorMessage("Wrong Code !");
+          console.log(error);
+      }
       } else {
 
       const isValidCode = !!data;
       if (isValidCode) {
         // Listener to save user data when they leave the website
-        handlePageClose(ActualStoreState, code)
+        handlePageClose(props.storeState, code)
         props.setUserCode(code)
         setSuccess(isValidCode);
-        retreive_account_data(data)
+        retreive_account_data(data, props.storeState)
       }
 
       }
     } catch (error) {
-      setErrorMessage("Wrong Code !");
-      console.log(error);
+      if (error.message == "TypeError: NetworkError when attempting to fetch resource.") {
+        setErrorMessage("Bad Internet Connection ! {<br/>}Try again");
+      } else {
+        setErrorMessage("Wrong Code !");
+        console.log(error);
+    }
     } finally {
       setLoading(false);
     }
@@ -98,7 +109,7 @@ export default function Account (props) {
             <h3>Your code :</h3>
             <h4>( Note it for later ! )</h4>
             <h2>{random_code}</h2>
-            <button onClick={() => { startNewSavedGame() }}>Start</button>
+            <button onClick={() => { startNewSavedGame(props.storeState) }}>Start</button>
           </div>
 
           <div className={styles.float_child}>
@@ -115,11 +126,11 @@ export default function Account (props) {
                 }
               }}
             />
+            {loading && <p>Loading...</p>}
+            {!success && <p>{errorMessage}</p>}
+            {success && <p>Code is valid!</p>}
           </div>
         </div>
-        {loading && <p>Loading...</p>}
-        {!success && <p>{errorMessage}</p>}
-        {success && <p>Code is valid!</p>}
       </div>
     </div>
   ) : "";

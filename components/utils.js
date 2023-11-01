@@ -15,7 +15,6 @@ export function handlePageClose(storeState, code) {
 
 
 export async function savePlayerProgress(storeState, code) {
-    console.log(storeState)
     const { error } = await supabase
     .from('cookie')
     .update({ "cookies" : window.cookies,
@@ -28,20 +27,20 @@ export async function savePlayerProgress(storeState, code) {
               }
           })
     .eq('code', code)
+
   }
 
-export async function addNewPlayerToDB(code) {
+export async function addNewPlayerToDB(code, storeState) {
+  const upgradeDictAtZeroValue = Object.keys(storeState).reduce((acc, cle) => {
+    acc[cle] = 0;
+    return acc;
+  }, {});
   const { error } = await supabase
   .from('cookie')
   .insert({ "code" : code,
             "cookies" : 0,
             "upgrades" : 
-            { 
-              "Autoclick" : 0,
-              "Multiplier" : 0,
-              "Bakery" : 0,
-
-            }
+            upgradeDictAtZeroValue
         })
     if (error) {
       console.log(error)

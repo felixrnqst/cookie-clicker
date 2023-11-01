@@ -14,11 +14,11 @@ export default function Popup(props) {
 
   function localClick(){
     setShowPopup(false);
-    setShowAccountPopup(true);
   }
 
   function saveClick(){
     setShowPopup(false);
+    setShowAccountPopup(true);
   }
 
   return showPopup ? (
@@ -37,6 +37,6 @@ export default function Popup(props) {
       </div>
     </div>
   ) : showAccountPopup ? (
-    <Account setTrigger={setShowAccountPopup} setCookies={props.setCookies} setUserCode={props.setUserCode}/>
+    <Account setTrigger={setShowAccountPopup} setCookies={props.setCookies} setUserCode={props.setUserCode} storeState={props.storeState} setStoreState={props.setStoreState}/>
   ) : "";
 }

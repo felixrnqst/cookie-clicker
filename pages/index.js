@@ -17,11 +17,16 @@ import Popup from '../components/popup'
 
 
 export default function Home() {
+  const upgrades = [
+    {name: 'Autoclick', description: 'Clicks the cookie automatically for you', price: 20, quantity: 0, max: -1, cps: 0.1},
+    {name: 'Multiplier', description: 'Multiplies the amount of cookies a click produces', price: 200, quantitiy: 0, max: -1, cps: 1},
+    {name: 'Bakery', description: 'An artisanal bakery that produces fresh cookies', price: 200, quantitiy: 0, max: -1, cps: 1},
+  ]
   const [cookies, setCookies] = useState(0);
   const [buttonPopup, setButtonPopup] = useState(false)
   const [userCode, setUserCode] = useState('')
-
-
+  const [storeState, setStoreState] = useState(Object.fromEntries(upgrades.map(i => [i.name, 0])));
+  
   const updateInterval = useRef()
   const updateOverride = useRef(false)
 
@@ -68,9 +73,9 @@ export default function Home() {
           <Header userCode={userCode}/>
           <Counter cookies={cookies}/>
           <Cookie increment={increment}/>
-          <Popup setCookies={setCookies} trigger={buttonPopup} setTrigger={setButtonPopup} setUserCode={setUserCode}/>
+          <Popup setCookies={setCookies} trigger={buttonPopup} setTrigger={setButtonPopup} setUserCode={setUserCode} storeState={storeState} setStoreState={setStoreState}/>
         </CookieBackground>
-        <Store cookies={cookies} setCookies={setCookies}/>
+        <Store cookies={cookies} setCookies={setCookies} upgrades={upgrades} storeState={storeState} setStoreState={setStoreState}/>
 
       </main>
 
