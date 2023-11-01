@@ -16,8 +16,12 @@ const freq = 1000/60
 
 var lastincrement = 0
 
+// There's surely better way to use storeState variable in other files (account.js here) but I only find this way...
+export const ActualStoreState = Object.fromEntries(upgrades.map(i => [i.name, 0]));
+
 export default function Store(props){
-  const [storeState, setStoreState] = useState(Object.fromEntries(upgrades.map(i => [i.name, 0])))
+  const [storeState, setStoreState] = useState(ActualStoreState);
+
   const interval = useRef()
   const timer = useRef(0)
 
