@@ -6,7 +6,7 @@ This group usefuls functions and functions to interact with supabase DB
 import supabase from "supabase";
 
 export function handlePageClose(storeState, code) {
-    // TODO : ADD ALSO LISTENER WHEN PAGE CLOSE
+    // TODO : ADD WORKING LISTENER ! This one looks like very unstable and depends on user's browser
     // Works when refresh page but not when page was closed by user.
     window.addEventListener('beforeunload', async function(event) {
       await savePlayerProgress(storeState, code)
@@ -15,6 +15,7 @@ export function handlePageClose(storeState, code) {
 
 
 export async function savePlayerProgress(storeState, code) {
+    if (code != "") {
     const { error } = await supabase
     .from('cookie')
     .update({ "cookies" : window.cookies,
@@ -28,6 +29,7 @@ export async function savePlayerProgress(storeState, code) {
           })
     .eq('code', code)
 
+    }
   }
 
 export async function addNewPlayerToDB(code, storeState) {

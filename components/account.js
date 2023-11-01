@@ -5,9 +5,8 @@ This creates the popup for the user either to create new account or enter their 
 import React, { useState, useEffect } from "react";
 import styles from './popup.module.scss'; //Uses the same styles as for the pop-up
 import supabase from "supabase";
-import { addNewPlayerToDB } from "./utils";
 import { customAlphabet } from 'nanoid';
-import { handlePageClose } from "../components/utils"
+import { addNewPlayerToDB, handlePageClose, savePlayerProgress } from "./utils"
 
 const alphabet = '0123456789';
 const nanoid = customAlphabet(alphabet, 6);
@@ -19,6 +18,8 @@ export default function Account (props) {
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
+  // TODO Find better way to save and sync data with the DB
+  const save_delay = 4;
 
 
   function retreive_account_data(data) {
@@ -39,7 +40,10 @@ export default function Account (props) {
     console.log(`Adding user_code ${random_code} to DB...`);
     addNewPlayerToDB(random_code, props.storeState);
     props.setUserCode(random_code)
-    props.setCookies(0) // DONE: Set cookies to 0
+    props.setCookies(0)
+    setInterval(() => {
+      savePlayerProgress(props.storeState, random_code);
+    }, save_delay * 1000); // save_delay in seconds
     setShowAccount(false);
 
     // Listener to save user data when he leaves the website
@@ -76,6 +80,9 @@ export default function Account (props) {
         handlePageClose(props.storeState, code)
         props.setUserCode(code)
         setSuccess(isValidCode);
+        setInterval(() => {
+          savePlayerProgress(props.storeState, code);
+        }, save_delay * 1000); // save_delay in seconds
         retreive_account_data(data, props.storeState)
       }
 
