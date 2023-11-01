@@ -55,20 +55,20 @@ export default function Store(props){
     timer.current += 1;
     // console.log(timer.current)
     //Need to increment based on CPS
-    var time = timer.current * freq //Time in millis
-    for(var u of upgrades){
-      console.log(Math.abs(time % (u.cps * 1000)))
-      if(storeState[u.name] > 0 && u.cps > 0 && Math.abs(time % (u.cps / 1000)) <= 1e-5){
-        console.log('Incrementing!')
-        console.log('Upgrade: ' + u.name)
-        console.log(storeState[u.name] > 0)
-        console.log(u.cps)
-        console.log("Time since last increment: " + (time - lastincrement))
-        lastincrement = time
-
-        props.setCookies((c) => c + storeState[u.name])
-      }
-    }
+    // var time = timer.current * freq //Time in millis
+    // for(var u of upgrades){
+    //   console.log(Math.abs(time % (u.cps * 1000)))
+    //   if(storeState[u.name] > 0 && u.cps > 0 && Math.abs(time % (u.cps / 1000)) <= 1e-5){
+    //     console.log('Incrementing!')
+    //     console.log('Upgrade: ' + u.name)
+    //     console.log(storeState[u.name] > 0)
+    //     console.log(u.cps)
+    //     console.log("Time since last increment: " + (time - lastincrement))
+    //     lastincrement = time
+    //
+    //     props.setCookies((c) => c + storeState[u.name])
+    //   }
+    // }
   }
 
   return (

@@ -15,8 +15,9 @@ import Cookie from '../components/cookie'
 import Store from '../components/store'
 import Popup from '../components/popup'
 
+
 export default function Home() {
-  const [cookies, setCookies] = useState(0)
+  const [cookies, setCookies] = useState(0);
   const [buttonPopup, setButtonPopup] = useState(false)
 
   const updateInterval = useRef()

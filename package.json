@@ -9,12 +9,17 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@nextui-org/react": "^2.1.13",
+    "@supabase/auth-helpers-nextjs": "^0.8.3",
+    "@supabase/supabase-js": "^2.38.4",
     "framer-motion": "^10.16.4",
+    "nanoid": "^5.0.2",
     "next": "14.0.0",
     "next-compose-plugins": "^2.2.1",
     "path": "^0.12.7",
     "react": "18.2.0",
     "react-dom": "18.2.0",
+    "redux": "^4.2.1",
     "sass": "^1.69.5"
   },
   "devDependencies": {
