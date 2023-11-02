@@ -9,8 +9,6 @@ import styles from './store.module.scss'
 
 const freq = 1000/60
 
-var lastincrement = 0
-
 export default function Store(props) {
   const interval = useRef()
   const timer = useRef(0)
@@ -24,11 +22,11 @@ export default function Store(props) {
 
   function increment(i){
     var u = props.upgrades.filter(k => k.name == i)[0]
-    if(props.cookies < u.price){
+    if(props.cookies < Math.floor(u.price * (1 + 0.1 * props.storeState[u.name]))){
       return;
     }
-    window.cookies = props.cookies - u.price
-    props.setCookies(props.cookies - u.price)
+    window.cookies = props.cookies - Math.floor(u.price * (1 + 0.1 * props.storeState[u.name]))
+    props.setCookies(props.cookies - Math.floor(u.price * (1 + 0.1 * props.storeState[u.name])))
     props.setStoreState(s => {
       s[i] += 1;
       return s
@@ -39,8 +37,8 @@ export default function Store(props) {
     if(props.storeState[i] <= 0){
       return;
     }
-    window.cookies = props.cookies + u.price
-    props.setCookies(props.cookies + u.price)
+    window.cookies = props.cookies + Math.floor(u.price * (1 + 0.1 * (props.storeState[u.name] - 1)))
+    props.setCookies(props.cookies + Math.floor(u.price * (1 + 0.1 * (props.storeState[u.name] - 1))))
     props.setStoreState(s => {
       s[i] -= 1;
       return s
@@ -49,22 +47,20 @@ export default function Store(props) {
 
   function loop(){//This handles the upgrades
     timer.current += 1;
-    // console.log(timer.current)
-    //Need to increment based on CPS
-    // var time = timer.current * freq //Time in millis
-    // for(var u of props.upgrades){
-    //   console.log(Math.abs(time % (u.cps * 1000)))
-    //   if(props.storeState[u.name] > 0 && u.cps > 0 && Math.abs(time % (u.cps / 1000)) <= 1e-5){
-    //     console.log('Incrementing!')
-    //     console.log('Upgrade: ' + u.name)
-    //     console.log(props.storeState[u.name] > 0)
-    //     console.log(u.cps)
-    //     console.log("Time since last increment: " + (time - lastincrement))
-    //     lastincrement = time
-    //
-    //     props.setCookies((c) => c + props.storeState[u.name])
-    //   }
-    // }
+    for(var u of props.upgrades){
+      if(props.storeState[u.name] > 0 && u.cps > 0){
+        if(u.cps < 1){
+          if(timer.current % (1000 / (freq * u.cps)) < 1){
+            props.setCookies((c) => c + props.storeState[u.name])
+          }
+        }else{
+          if(timer.current % (1000 / (freq)) < 1){
+            props.setCookies((c) => c + props.storeState[u.name] * u.cps)
+          }
+        }
+
+      }
+    }
   }
 
   return (
@@ -72,17 +68,18 @@ export default function Store(props) {
       <h3>Upgrades</h3>
       {props.upgrades.map(u =>
         (<div className={styles.storeItem} key={u.name}>
-          <h4>{u.name} 🍪{u.price}</h4>
+          <h4>{u.name} 🍪{Math.floor(u.price * (1 + 0.1 * props.storeState[u.name]))}</h4>
           <div className={styles.storeItemRow}>
             <p>{u.description}</p>
             <div className={styles.counter}>
               <span className={styles.change + (props.storeState[u.name] > 0 ? ' ' + styles.active : '')} onClick={() => decrement(u.name)}>-</span>
               <span>{props.storeState[u.name]}</span>
-              <span className={styles.change + (props.cookies >= u.price ? ' ' + styles.active : '')} onClick={() => increment(u.name)}>+</span>
+              <span className={styles.change + (props.cookies >= Math.floor(u.price * (1 + 0.1 * props.storeState[u.name])) ? ' ' + styles.active : '')} onClick={() => increment(u.name)}>+</span>
             </div>
           </div>
           <div className={styles.info}>
-          +{u.cps}CPS
+          {(typeof u.cps != 'undefined' &&u.cps > 0) && '+' + u.cps + ' CPS'}
+          {(typeof u.mult != 'undefined' && u.mult > 1) && 'Click multiplier x' + u.mult}
           </div>
         </div>)
       )}

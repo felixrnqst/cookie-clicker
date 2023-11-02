@@ -29,16 +29,16 @@ export default function Cookie(props){
     setClick(true);
     setTimeout(() => setClick(false), 100)
     props.increment()
-    
+
     playClickSound();
     await animate(scope.current, { opacity: 1, transform: 'translateX(-50%) translateY(-50%)' }, { duration: 0 })
     await animate(scope.current, { opacity: 0, transform: 'translateX(-50%) translateY(-5rem)'}, { duration: 1 })
 
   }
-  
+
   return (
   <div className={styles.container}>
-    <div className={styles.cursor} style={{top: coords[1], left: coords[0]}} ref={scope}>+1</div>
+    <div className={styles.cursor} style={{top: coords[1], left: coords[0]}} ref={scope}>+{props.cookiesPerClick}</div>
     <motion.div
       className={styles.hoverbox}
       whileHover={{
@@ -51,7 +51,7 @@ export default function Cookie(props){
 
           onTap={tapHandler}
       >
-        <Image layout='intrinsic' alt='cookie' src={cookie}/>
+        <Image layout='intrinsic' alt='cookie' src={cookie} priority/>
       </motion.div>
     </motion.div>
   </div>)
