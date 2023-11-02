@@ -19,12 +19,14 @@ export default function Account (props) {
   const [success, setSuccess] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
   // TODO Find better way to save and sync data with the DB
-  const save_delay = 4; // Save user data to DB every 4 seconds
+  const save_delay = 2; // Save user data to DB every x seconds
 
 
   function retreive_account_data(data) {
     setShowAccount(false);
+    console.log(data)
     window.cookies = data.cookies
+    props.setCookies(data.cookies)
     localStorage.setItem("cookies", data.cookies);
     // Recover all upgrade of user
     for (let upgrade_name in props.storeState) {
@@ -40,6 +42,7 @@ export default function Account (props) {
     console.log(`Adding user_code ${random_code} to DB...`);
     addNewPlayerToDB(random_code, props.storeState);
     props.setUserCode(random_code);
+    window.cookies = 0
     props.setCookies(0);
     setInterval(() => {
       savePlayerProgress(props.storeState, random_code);

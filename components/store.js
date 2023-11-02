@@ -27,6 +27,7 @@ export default function Store(props) {
     if(props.cookies < u.price){
       return;
     }
+    window.cookies = props.cookies - u.price
     props.setCookies(props.cookies - u.price)
     props.setStoreState(s => {
       s[i] += 1;
@@ -38,6 +39,7 @@ export default function Store(props) {
     if(props.storeState[i] <= 0){
       return;
     }
+    window.cookies = props.cookies + u.price
     props.setCookies(props.cookies + u.price)
     props.setStoreState(s => {
       s[i] -= 1;

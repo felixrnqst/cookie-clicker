@@ -23,18 +23,17 @@ export default function Home() {
     {name: 'Bakery', description: 'An artisanal bakery that produces fresh cookies', price: 200, quantitiy: 0, max: -1, cps: 10},
   ]
   const [cookies, setCookies] = useState(0);
-  const [buttonPopup, setButtonPopup] = useState(false)
-  const [userCode, setUserCode] = useState('')
+  const [buttonPopup, setButtonPopup] = useState(false);
+  const [userCode, setUserCode] = useState('');
   const [storeState, setStoreState] = useState(Object.fromEntries(upgrades.map(i => [i.name, 0])));
   
-  const updateInterval = useRef()
-  const updateOverride = useRef(false)
+  const updateInterval = useRef();
+  const updateOverride = useRef(false);
 
   useEffect(() => {// useEffect is run only once when the component is mounted
     setButtonPopup(localStorage.getItem("buttonPopup") !== null ? localStorage.getItem("buttonPopup") == 'true' : true);
-    var c  = localStorage.getItem("cookies") !== null ? parseInt(localStorage.getItem("cookies")) : 0
-    window.cookies = c //We want to use window.cookies to be able to "hack" the game in the console
-    setCookies(c)
+    window.cookies = cookies; //We want to use window.cookies to be able to "hack" the game in the console
+    setCookies(cookies);
     updateInterval.current = setInterval(() => {
       if(window.cookies != cookies && !updateOverride.current){
         setCookies(window.cookies);
@@ -42,11 +41,11 @@ export default function Home() {
     }, 1000/60)
   }, [])
 
-  useEffect(() => {
-    updateOverride.current = false;
-    window.cookies = cookies
-    localStorage.setItem("cookies", cookies);
-  }, [cookies])
+  // useEffect(() => {
+  //   updateOverride.current = false;
+  //   window.cookies = cookies
+  //   localStorage.setItem("cookies", cookies);
+  // }, [cookies])
 
   useEffect(() => {
     localStorage.setItem("buttonPopup", buttonPopup ? 'true' : 'false');//Saves to localstorage to avoid having to see the dialog on every page load
@@ -54,9 +53,11 @@ export default function Home() {
 
   function increment(){
     updateOverride.current = true;
-    setCookies((c) => {
-      localStorage.setItem("cookies", c+1);
-      return c+1
+    window.cookies += 1
+    setCookies((cookies) => {
+      localStorage.setItem("cookies", cookies+1);
+      return cookies+1;
+    
     })
 
   }

@@ -4,6 +4,7 @@ This group usefuls functions and functions to interact with supabase DB
 */
 
 import supabase from "supabase";
+import Store from "./store";
 
 export function handlePageClose(storeState, code) {
     // TODO : ADD WORKING LISTENER ! This one looks like very unstable and depends on user's browser
@@ -17,6 +18,7 @@ export function handlePageClose(storeState, code) {
 export async function savePlayerProgress(storeState, code) {
     if (code != "") {
       console.log('Saving...')
+      console.log("Nombre de cookies a save : " + window.cookies)
     const { error } = await supabase
     .from('cookie')
     .update({ "cookies" : window.cookies,
