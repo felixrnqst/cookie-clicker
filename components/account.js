@@ -2,7 +2,7 @@
 account.js - Created by Guillaume
 This creates the popup for the user either to create new account or enter their account information
 */
-import React, { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import styles from './popup.module.scss'; //Uses the same styles as for the pop-up
 import supabase from "supabase";
 import { customAlphabet } from 'nanoid';
@@ -18,6 +18,8 @@ export default function Account (props) {
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
+
+  const codeRef = useRef();
   // TODO Find better way to save and sync data with the DB
   const save_delay = 2; // Save user data to DB every x seconds
 
@@ -42,14 +44,14 @@ export default function Account (props) {
     console.log(`Adding user_code ${random_code} to DB...`);
     addNewPlayerToDB(random_code, props.storeState);
     props.setUserCode(random_code);
-    window.cookies = 0
     props.setCookies(0);
     setInterval(() => {
       savePlayerProgress(props.storeState, random_code);
     }, save_delay * 1000); // save_delay in seconds
+    localStorage.setItem('code', random_code)
 
     setShowAccount(false);
-    // Listener to save user data when he leaves the website
+    // Listener to save user data when they leave the website
     handlePageClose(props.storeState, random_code)
   }
 
@@ -119,7 +121,7 @@ export default function Account (props) {
             <h3>Your code :</h3>
             <h4>( Note it for later ! )</h4>
             <h2>{random_code}</h2>
-            <button onClick={() => { startNewSavedGame(props.storeState) }}>Start</button>
+            <button onClick={() => startNewSavedGame(props.storeState)}>Start</button>
           </div>
 
           <div className={styles.float_child}>
@@ -128,6 +130,7 @@ export default function Account (props) {
             </div>
             <h3>Session Code : {<br/>}(0 is the basic one)</h3>
             <input
+              ref={codeRef}
               className={styles.code_input}
               placeholder="Session Code"
               onKeyUp={(event) => {
@@ -136,6 +139,7 @@ export default function Account (props) {
                 }
               }}
             />
+            <button onClick={() => login(codeRef.current.value.toString())}>Retrieve</button>
             {loading && <p>Loading...</p>}
             {!success && <p>{errorMessage}</p>}
             {success && <p>Code is valid!</p>}
