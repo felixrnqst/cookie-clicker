@@ -14,6 +14,7 @@ import Counter from '../components/counter'
 import Cookie from '../components/cookie'
 import Store from '../components/store'
 import Popup from '../components/popup'
+import RandomPhrase from '../components/randomphrase'
 
 import { getRandomCode } from './api/code'
 
@@ -33,6 +34,21 @@ export default function Home({randomCode}) {
 
   const updateInterval = useRef();
   const updateOverride = useRef(false);
+
+  // TODO : ADD A LOT MORE FUNNY PHRASES
+  const phrases = [       
+    'Le cookie est beau n\'est-ce pas ?',
+    'C\'est pour Nsigma ou quoi ?',
+    'T\'a vu on a ecrit le jeu en anglais',
+    'The cookie is a lie.',
+    `Recette de cookie : 1 oeuf, 100g de beurre, 100g de sucre, 200g de farine, 1 pincée de sel, 1 sachet de levure, 200g de chocolat`,
+  ];
+  // TODO Add break lines in recette de cookies (\n doesn't work for some reason ?)
+  // TODO Add more dynamic phrases
+  // IDEA : Get random inspirationnal cookie quote from API
+  // FIXME : Fix cookie phrase not loading the right amount of cookies
+  phrases.push(`Seulement ${cookies} cookies ? Pas ouf...`)
+  const [phrase, setPhrase] = useState(phrases[0]);
 
   useEffect(() => {// useEffect is run only once when the component is mounted
     setButtonPopup(localStorage.getItem("buttonPopup") !== null ? localStorage.getItem("buttonPopup") == 'true' : true);
@@ -99,6 +115,7 @@ export default function Home({randomCode}) {
 
       <main className={styles.main}>
         <CookieBackground>
+          <RandomPhrase cookies={cookies} phrases={phrases} phrase={phrase} setPhrase={setPhrase}/>
           <Header userCode={userCode}/>
           <Counter cookies={cookies} cps={cps}/>
           <Cookie increment={increment} cookiesPerClick={cookiesPerClick}/>

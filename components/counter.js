@@ -35,7 +35,7 @@ export default function Counter({cookies, cps}){
         <title>{prettyDisplay(cookies) + (cookies != 1 ? ' cookies' : ' cookie')}</title>
       </Head>
       <h3 style={{fontVariantNumeric: 'tabular-nums', fontSize: '1.6rem'}}>{prettyDisplay(cookies)} {cookies != 1 ? 'cookies' : 'cookie'}</h3>
-      <h4 style={{textAlign: 'center'}}>{cps} CPS</h4>
+      <h4 style={{textAlign: 'center'}}>{prettyDisplay(cps.toPrecision(2))} CPS</h4>
     </>
   )
 }
