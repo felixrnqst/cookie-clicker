@@ -41,19 +41,14 @@ export default function Home({randomCode}) {
     updateInterval.current = setInterval(() => {
       var cook = 0;
       setCookies((i) => {
-        console.log(i)
         cook = i;
         return i
       });
       if(window.cookies != cook){
-        console.log(window.cookies)
-        console.log(cook)
         if(!updateOverride.current){
-          console.log("Updating cookies from window!")
           setCookies(window.cookies);
         }else{
           updateOverride.current = false;
-
         }
       }
     }, 1000/60)

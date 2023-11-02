@@ -4,9 +4,7 @@ This creates the popup for the user either to create new account or enter their 
 */
 import { useState, useEffect, useRef } from "react";
 import styles from './popup.module.scss'; //Uses the same styles as for the pop-up
-import supabase from "supabase";
-import { addNewPlayerToDB, handlePageClose, savePlayerProgress } from "../lib/utils"
-
+import {handlePageClose, savePlayerProgress } from "../lib/utils"
 
 export default function Account ({setTrigger, storeState, setStoreState, setUserCode, setCookies, randomCode}) {
   const [showAccount, setShowAccount] = useState(true);
@@ -14,10 +12,16 @@ export default function Account ({setTrigger, storeState, setStoreState, setUser
   const [success, setSuccess] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
 
-
   const codeRef = useRef();
+  const saveInterval = useRef();
   // TODO Find better way to save and sync data with the DB
   const save_delay = 2; // Save user data to DB every x seconds
+
+  useEffect(() => {
+    return () => {//Cleanup function
+      clearInterval(saveInterval.current);
+    }
+  })
 
 
   function retreive_account_data(data) {
@@ -32,8 +36,6 @@ export default function Account ({setTrigger, storeState, setStoreState, setUser
         s[upgrade_name] = data.upgrades[upgrade_name];
         return s})
     }
-
-
   }
 
   async function startNewSavedGame() {
@@ -63,34 +65,32 @@ export default function Account ({setTrigger, storeState, setStoreState, setUser
     }
 
     try {
+      console.log("Fetching")
       setErrorMessage("")
       setLoading(true);
-      const { data, error } = await supabase
-        .from('cookie')
-        .select(`code, cookies, upgrades`)
-        .eq("code", code)
-        .single();
-      if (error) {
-        if (error.message == "TypeError: NetworkError when attempting to fetch resource.") {
-          setErrorMessage("Bad Internet Connection !" );
-        } else {
-          setErrorMessage("Wrong Code !");
-          console.log(error);
-      }
-      } else {
-
-      const isValidCode = !!data;
-      if (isValidCode) {
-        // Listener to save user data when they leave the website
-        handlePageClose(storeState, code)
-        setUserCode(code)
-        setSuccess(isValidCode);
-        setInterval(() => {
-          savePlayerProgress(storeState, code);
-        }, save_delay * 1000); // save_delay in seconds
-        retreive_account_data(data, storeState)
-      }
-
+      var res = await fetch('/api/retrieve-data', {
+        method: 'POST',
+        body: JSON.stringify({code})
+      })
+      console.log(res.status);
+      var json = await res.json();
+      if(res.status == 200){
+        console.log(json.data)
+        const isValidCode = !!json.data;
+        if (isValidCode) {
+          // Listener to save user data when they leave the website
+          handlePageClose(storeState, code)
+          setUserCode(code)
+          setSuccess(isValidCode);
+          saveInterval.current = setInterval(() => {
+            savePlayerProgress(storeState, code);
+          }, save_delay * 1000); // save_delay in seconds
+          retreive_account_data(json.data, storeState)
+        }else{
+          console.log("Code isn't valid!")
+        }
+      }else{
+        setErrorMessage(json.error);
       }
     } catch (error) {
       if (error.message == "TypeError: NetworkError when attempting to fetch resource.") {
@@ -98,7 +98,7 @@ export default function Account ({setTrigger, storeState, setStoreState, setUser
       } else {
         setErrorMessage("Wrong Code !");
         console.log(error);
-    }
+      }
     } finally {
       setLoading(false);
     }

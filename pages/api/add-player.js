@@ -1,6 +1,5 @@
-// import nextConnect from "next-connect";
-// import multer from "multer";
 import { addNewPlayerToDB } from '../../lib/utils'
+import supabase from "supabase";
 
 
 export default (req, res) => {
@@ -12,9 +11,7 @@ export default (req, res) => {
 };
 
 function run(req, res){
-  if(req.method == 'POST'){
     var body = JSON.parse(req.body);
-  }
   if(typeof body.randomCode == 'undefined' || typeof body.storeState == 'undefined'){
     return res.status('400').json({error: 'Correct parameters not supplied'})
   }
