@@ -26,7 +26,9 @@ export default function Home() {
   const [buttonPopup, setButtonPopup] = useState(false);
   const [userCode, setUserCode] = useState('');
   const [storeState, setStoreState] = useState(Object.fromEntries(upgrades.map(i => [i.name, 0])));
+
   const [cookiesPerClick, setCookiesPerClick] = useState(1);
+  const [cps, setCps] = useState(0);
 
   const updateInterval = useRef();
   const updateOverride = useRef(false);
@@ -60,10 +62,14 @@ export default function Home() {
   }, [])
 
   useEffect(() => {
-    console.log("Updating cookies per click")
     var inc = upgrades.filter(i => typeof i.mult != 'undefined' && i.mult > 1 && storeState[i.name] > 0).map(i => Math.pow(i.mult, storeState[i.name]))
     inc = Math.round(inc.reduce((a,c) => a * c, 1))
     setCookiesPerClick(inc);
+    var cp = upgrades.filter(i => typeof i.cps != 'undefined' && i.cps > 0 && storeState[i.name] > 0).map(i => i.cps * storeState[i.name])
+    console.log(cp)
+    cp = cp.reduce((a,c) => a + c, 0)
+    console.log(cp)
+    setCps(cp)
   })
 
   useEffect(() => {
@@ -100,7 +106,7 @@ export default function Home() {
       <main className={styles.main}>
         <CookieBackground>
           <Header userCode={userCode}/>
-          <Counter cookies={cookies}/>
+          <Counter cookies={cookies} cps={cps}/>
           <Cookie increment={increment} cookiesPerClick={cookiesPerClick}/>
           <Popup setCookies={setCookies} trigger={buttonPopup} setTrigger={setButtonPopup} setUserCode={setUserCode} storeState={storeState} setStoreState={setStoreState}/>
         </CookieBackground>

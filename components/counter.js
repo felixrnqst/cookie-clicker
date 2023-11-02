@@ -3,7 +3,7 @@ counter.js - Created by Felix
 This formats the cookie value
 */
 import Head from 'next/head';
-export default function Counter({cookies}){
+export default function Counter({cookies, cps}){
 
   function prettyDisplay(c){
     var d = 1
@@ -35,6 +35,7 @@ export default function Counter({cookies}){
         <title>{prettyDisplay(cookies) + (cookies != 1 ? ' cookies' : ' cookie')}</title>
       </Head>
       <h3 style={{fontVariantNumeric: 'tabular-nums', fontSize: '1.6rem'}}>{prettyDisplay(cookies)} {cookies != 1 ? 'cookies' : 'cookie'}</h3>
+      <h4 style={{textAlign: 'center'}}>{cps} CPS</h4>
     </>
   )
 }
