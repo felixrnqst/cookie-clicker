@@ -62,9 +62,7 @@ export default function Home({randomCode}) {
     inc = Math.round(inc.reduce((a,c) => a * c, 1))
     setCookiesPerClick(inc);
     var cp = upgrades.filter(i => typeof i.cps != 'undefined' && i.cps > 0 && storeState[i.name] > 0).map(i => i.cps * storeState[i.name])
-    console.log(cp)
     cp = cp.reduce((a,c) => a + c, 0)
-    console.log(cp)
     setCps(cp)
   })
 
@@ -104,7 +102,7 @@ export default function Home({randomCode}) {
           <Header userCode={userCode}/>
           <Counter cookies={cookies} cps={cps}/>
           <Cookie increment={increment} cookiesPerClick={cookiesPerClick}/>
-          <Popup setCookies={setCookies} trigger={buttonPopup} setTrigger={setButtonPopup} setUserCode={setUserCode} storeState={storeState} setStoreState={setStoreState} randomCode={randomCode}/>
+          <Popup cookies={cookies} setCookies={setCookiesOverride} trigger={buttonPopup} setTrigger={setButtonPopup} userCode={userCode} setUserCode={setUserCode} storeState={storeState} setStoreState={setStoreState} randomCode={randomCode}/>
         </CookieBackground>
         <Store cookies={cookies} setCookies={setCookiesOverride} upgrades={upgrades} storeState={storeState} setStoreState={setStoreState}/>
 

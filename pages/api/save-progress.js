@@ -1,5 +1,6 @@
 import supabase from 'supabase'
 
+
 export default async (req, res) => {
   if (req.method === 'POST') {
     await run(req,res)
@@ -10,17 +11,21 @@ export default async (req, res) => {
 
 async function run(req, res){
   var body = JSON.parse(req.body);
-  if(typeof body.code == 'undefined'){
+  if(typeof body.code == 'undefined' || typeof body.cookies == 'undefined' || typeof body.storeState == 'undefined'){
     return res.status(400).json({error: 'Correct parameters not supplied'})
   }
 
-  const { data, error } = await supabase
-    .from('cookie')
-    .select(`code, cookies, upgrades`)
-    .eq("code", body.code)
-    .single();
+  console.log(body.cookies)
+  console.log(body.storeState)
+  console.log(body.code)
 
-  console.log(data)
+  const { error } = await supabase
+    .from('cookie')
+    .update({ "cookies" : body.cookies,
+              "upgrades" : body.storeState
+          })
+    .eq('code', body.code)
+
   console.log(error)
 
   if (error) {
@@ -31,6 +36,6 @@ async function run(req, res){
       return res.status(400).json({error: "Wrong code!"});
     }
   }else{
-    return res.status(200).json({data});
+    return res.status(200).json({message: 'Success'});
   }
 }

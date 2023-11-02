@@ -37,6 +37,6 @@ export default function Popup(props) {
       </div>
     </div>
   ) : showAccountPopup ? (
-    <Account setTrigger={setShowAccountPopup} setCookies={props.setCookies} setUserCode={props.setUserCode} storeState={props.storeState} setStoreState={props.setStoreState} randomCode={props.randomCode}/>
+    <Account setTrigger={setShowAccountPopup} cookies={props.cookies} setCookies={props.setCookies} userCode={props.userCode} setUserCode={props.setUserCode} storeState={props.storeState} setStoreState={props.setStoreState} randomCode={props.randomCode}/>
   ) : "";
 }

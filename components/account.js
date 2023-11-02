@@ -4,9 +4,16 @@ This creates the popup for the user either to create new account or enter their 
 */
 import { useState, useEffect, useRef } from "react";
 import styles from './popup.module.scss'; //Uses the same styles as for the pop-up
-import {handlePageClose, savePlayerProgress } from "../lib/utils"
 
-export default function Account ({setTrigger, storeState, setStoreState, setUserCode, setCookies, randomCode}) {
+export function handlePageClose(storeState, code) {
+  // TODO : ADD WORKING LISTENER ! This one looks like very unstable and depends on user's browser
+  // Works when refresh page but not when page was closed by user.
+  window.addEventListener('beforeunload', async function(event) {
+    await savePlayerProgress(storeState, code)
+  });
+}
+
+export default function Account ({setTrigger, storeState, setStoreState, userCode, setUserCode, cookies, setCookies, randomCode}) {
   const [showAccount, setShowAccount] = useState(true);
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
@@ -21,13 +28,11 @@ export default function Account ({setTrigger, storeState, setStoreState, setUser
     return () => {//Cleanup function
       clearInterval(saveInterval.current);
     }
-  })
-
+  }, [])
 
   function retreive_account_data(data) {
     setShowAccount(false);
     console.log(data)
-    window.cookies = data.cookies
     setCookies(data.cookies)
     localStorage.setItem("cookies", data.cookies);
     // Recover all upgrade of user
@@ -38,6 +43,22 @@ export default function Account ({setTrigger, storeState, setStoreState, setUser
     }
   }
 
+  async function savePlayerProgress(code, storeState){
+    console.log("Saving player progress")
+    if (setUserCode != "") {
+      // console.log("Number of cookies to save : " + window.cookies)
+
+      var res = await fetch('/api/save-progress', {
+        method: 'POST',
+        body: JSON.stringify({storeState, code, cookies: window.cookies})
+      });
+      // console.log(res.status)
+      // var json = await res.json()
+      // console.log(json);
+    }
+
+  }
+
   async function startNewSavedGame() {
     console.log(`Adding user_code ${randomCode} to DB...`);
     var res = await fetch('/api/add-player', {
@@ -46,11 +67,9 @@ export default function Account ({setTrigger, storeState, setStoreState, setUser
     })
     console.log('HTTP status: ' + res.status);
     setUserCode(randomCode);
+    localStorage.setItem('code', randomCode);
     setCookies(0);
-    setInterval(() => {
-      savePlayerProgress(storeState, randomCode);
-    }, save_delay * 1000); // save_delay in seconds
-    localStorage.setItem('code', randomCode)
+    saveInterval.current = setInterval(() => savePlayerProgress(randomCode, storeState), save_delay * 1000); // save_delay in seconds
 
     setShowAccount(false);
     // Listener to save user data when they leave the website
@@ -80,11 +99,10 @@ export default function Account ({setTrigger, storeState, setStoreState, setUser
         if (isValidCode) {
           // Listener to save user data when they leave the website
           handlePageClose(storeState, code)
+          localStorage.setItem('code', code);
           setUserCode(code)
           setSuccess(isValidCode);
-          saveInterval.current = setInterval(() => {
-            savePlayerProgress(storeState, code);
-          }, save_delay * 1000); // save_delay in seconds
+          saveInterval.current = setInterval(() => savePlayerProgress(code, storeState), save_delay * 1000); // save_delay in seconds
           retreive_account_data(json.data, storeState)
         }else{
           console.log("Code isn't valid!")
