@@ -15,8 +15,9 @@ import Cookie from '../components/cookie'
 import Store from '../components/store'
 import Popup from '../components/popup'
 
+import { getRandomCode } from './api/code'
 
-export default function Home() {
+export default function Home({randomCode}) {
   const upgrades = [
     {name: 'Autoclick', description: 'Clicks the cookie automatically for you', price: 20, quantity: 0, max: -1, cps: 0.1},
     {name: 'Multiplier', description: 'Multiplies the amount of cookies a click produces', price: 100, quantitiy: 0, max: -1, cps: 0, mult: 1.5},
@@ -108,7 +109,7 @@ export default function Home() {
           <Header userCode={userCode}/>
           <Counter cookies={cookies} cps={cps}/>
           <Cookie increment={increment} cookiesPerClick={cookiesPerClick}/>
-          <Popup setCookies={setCookies} trigger={buttonPopup} setTrigger={setButtonPopup} setUserCode={setUserCode} storeState={storeState} setStoreState={setStoreState}/>
+          <Popup setCookies={setCookies} trigger={buttonPopup} setTrigger={setButtonPopup} setUserCode={setUserCode} storeState={storeState} setStoreState={setStoreState} randomCode={randomCode}/>
         </CookieBackground>
         <Store cookies={cookies} setCookies={setCookiesOverride} upgrades={upgrades} storeState={storeState} setStoreState={setStoreState}/>
 
@@ -119,4 +120,13 @@ export default function Home() {
       </footer>
     </div>
   )
+}
+
+export function getServerSideProps(){
+  return {
+    props: {
+      randomCode: getRandomCode()
+    }
+  }
+
 }

@@ -5,19 +5,15 @@ This creates the popup for the user either to create new account or enter their 
 import { useState, useEffect, useRef } from "react";
 import styles from './popup.module.scss'; //Uses the same styles as for the pop-up
 import supabase from "supabase";
-import { customAlphabet } from 'nanoid';
-import { addNewPlayerToDB, handlePageClose, savePlayerProgress } from "./utils"
-
-const alphabet = '0123456789';
-const nanoid = customAlphabet(alphabet, 6);
-const random_code = parseInt(nanoid());
+import { addNewPlayerToDB, handlePageClose, savePlayerProgress } from "../lib/utils"
 
 
-export default function Account (props) {
+export default function Account ({setTrigger, storeState, setStoreState, setUserCode, setCookies, randomCode}) {
   const [showAccount, setShowAccount] = useState(true);
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
+
 
   const codeRef = useRef();
   // TODO Find better way to save and sync data with the DB
@@ -28,11 +24,11 @@ export default function Account (props) {
     setShowAccount(false);
     console.log(data)
     window.cookies = data.cookies
-    props.setCookies(data.cookies)
+    setCookies(data.cookies)
     localStorage.setItem("cookies", data.cookies);
     // Recover all upgrade of user
-    for (let upgrade_name in props.storeState) {
-      props.setStoreState(s => {
+    for (let upgrade_name in storeState) {
+      setStoreState(s => {
         s[upgrade_name] = data.upgrades[upgrade_name];
         return s})
     }
@@ -40,19 +36,23 @@ export default function Account (props) {
 
   }
 
-  function startNewSavedGame() {
-    console.log(`Adding user_code ${random_code} to DB...`);
-    addNewPlayerToDB(random_code, props.storeState);
-    props.setUserCode(random_code);
-    props.setCookies(0);
+  async function startNewSavedGame() {
+    console.log(`Adding user_code ${randomCode} to DB...`);
+    var res = await fetch('/api/add-player', {
+      method: 'POST',
+      body: JSON.stringify({randomCode, storeState})
+    })
+    console.log('HTTP status: ' + res.status);
+    setUserCode(randomCode);
+    setCookies(0);
     setInterval(() => {
-      savePlayerProgress(props.storeState, random_code);
+      savePlayerProgress(storeState, randomCode);
     }, save_delay * 1000); // save_delay in seconds
-    localStorage.setItem('code', random_code)
+    localStorage.setItem('code', randomCode)
 
     setShowAccount(false);
     // Listener to save user data when they leave the website
-    handlePageClose(props.storeState, random_code)
+    handlePageClose(storeState, randomCode)
   }
 
   async function login(code) {
@@ -82,13 +82,13 @@ export default function Account (props) {
       const isValidCode = !!data;
       if (isValidCode) {
         // Listener to save user data when they leave the website
-        handlePageClose(props.storeState, code)
-        props.setUserCode(code)
+        handlePageClose(storeState, code)
+        setUserCode(code)
         setSuccess(isValidCode);
         setInterval(() => {
-          savePlayerProgress(props.storeState, code);
+          savePlayerProgress(storeState, code);
         }, save_delay * 1000); // save_delay in seconds
-        retreive_account_data(data, props.storeState)
+        retreive_account_data(data, storeState)
       }
 
       }
@@ -108,7 +108,7 @@ export default function Account (props) {
     <div className={styles.popup}>
       <div className={styles.popup_inner}>
         <div className={styles.close}>
-          <button onClick={() => { props.setTrigger(false); }}>X</button>
+          <button onClick={() => { setTrigger(false); }}>X</button>
         </div>
 
         <div className={styles.popupfooter}></div>
@@ -116,12 +116,12 @@ export default function Account (props) {
         <div className={styles.float_container}>
           <div className={styles.float_child}>
             <div className={styles.title}>
-              <h2>Start a whole new game :</h2>
+              <h2>Start a new game :</h2>
             </div>
             <h3>Your code :</h3>
             <h4>( Note it for later ! )</h4>
-            <h2>{random_code}</h2>
-            <button onClick={() => startNewSavedGame(props.storeState)}>Start</button>
+            <h2>{randomCode}</h2>
+            <button onClick={() => startNewSavedGame(storeState)}>Start</button>
           </div>
 
           <div className={styles.float_child}>
