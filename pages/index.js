@@ -3,7 +3,6 @@ index.js - Created by Felix
 This is the main page on the website and it will display the cookie clicker game
 */
 import { useState, useEffect, useRef } from 'react'
-
 import Head from 'next/head'
 import Image from 'next/image'
 import styles from '../styles/Home.module.scss'
@@ -16,13 +15,15 @@ import Store from '../components/store'
 import Popup from '../components/popup'
 import RandomPhrase from '../components/randomphrase'
 
+import { prettyDisplay } from '../components/counter'
+
 import { getRandomCode } from './api/code'
 
 export default function Home({randomCode}) {
   const upgrades = [
-    {name: 'Autoclick', description: 'Clicks the cookie automatically for you', price: 20, quantity: 0, max: -1, cps: 0.1},
-    {name: 'Multiplier', description: 'Multiplies the amount of cookies a click produces', price: 100, quantitiy: 0, max: -1, cps: 0, mult: 1.5},
-    {name: 'Bakery', description: 'An artisanal bakery that produces fresh cookies', price: 200, quantitiy: 0, max: -1, cps: 5},
+    {name: 'Autoclick', description: 'Clicks the cookie automatically for you', price: 20, quantity: 0, max: -1, cps: 0.1, imagePath: '/autoclick.png'},
+    {name: 'Multiplier', description: 'Multiplies the amount of cookies a click produces', price: 100, quantitiy: 0, max: -1, cps: 0, mult: 1.5, imagePath: '/multiplier.png'},
+    {name: 'Bakery', description: 'An artisanal bakery that produces fresh cookies', price: 200, quantitiy: 0, max: -1, cps: 5, imagePath: '/bakery.png'},
   ]
   const [cookies, setCookies] = useState(0);
   const [buttonPopup, setButtonPopup] = useState(false);
@@ -46,7 +47,7 @@ export default function Home({randomCode}) {
     'T\'a vu on a ecrit le jeu en anglais',
     'The cookie is a lie.',
     `Recette de cookie : 1 oeuf, 100g de beurre, 100g de sucre, 200g de farine, 1 pincée de sel, 1 sachet de levure, 200g de chocolat`,
-    `Seulement ${cookies} cookies ? Pas ouf...`,
+    `Seulement ${prettyDisplay(cookies)} cookies ? Pas ouf...`,
   ]);
   
   // TODO Add break lines in recette de cookies (\n doesn't work for some reason ?)
@@ -91,7 +92,7 @@ export default function Home({randomCode}) {
     // TODO Find a better way to dynamically update the needed phrases other than using ther last phrase of phrases array
     setPhrases(prevPhrases => {
       const newPhrases = prevPhrases.slice(0, -1); // Crée une nouvelle copie de phrases sans la dernière phrase
-      newPhrases.push(`Seulement ${cookies} cookies ? Pas ouf...`); // Ajoute la nouvelle phrase à la fin de la nouvelle copie
+      newPhrases.push(`Seulement ${prettyDisplay(cookies)} cookies ? Pas ouf...`); // Ajoute la nouvelle phrase à la fin de la nouvelle copie
       return newPhrases;
     });
   }, [cookies])
@@ -123,14 +124,14 @@ export default function Home({randomCode}) {
     <div className={styles.container}>
       <Head>
         <meta name="description" content="Online cookie clicker game" />
-        <link rel="icon" href="/favicon.ico" />
+        <link rel="icon" href="/cookie.png" />
       </Head>
 
       <main className={styles.main}>
         <CookieBackground>
           <RandomPhrase cookies={cookies} phrases={phrases} storeState={storeState}/>
           <Header userCode={userCode}/>
-          <Counter cookies={cookies} StoreCps={cps} manualCpsDuration={manualCpsDuration} clicks={clicks}/>
+          <Counter cookies={cookies} StoreCps={cps} manualCpsDuration={manualCpsDuration} clicks={clicks} cookiesPerClick={cookiesPerClick}/>
           <Cookie increment={increment} cookiesPerClick={cookiesPerClick}/>
           <Popup cookies={cookies} setCookies={setCookiesOverride} trigger={buttonPopup} setTrigger={setButtonPopup} userCode={userCode} setUserCode={setUserCode} storeState={storeState} setStoreState={setStoreState} randomCode={randomCode}/>
         </CookieBackground>
