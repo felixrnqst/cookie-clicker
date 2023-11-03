@@ -29,26 +29,29 @@ export default function Home({randomCode}) {
   const [userCode, setUserCode] = useState('');
   const [storeState, setStoreState] = useState(Object.fromEntries(upgrades.map(i => [i.name, 0])));
 
+  const [clicks, setClicks] = useState([]);
+  const manualCpsDuration = 1 //s
   const [cookiesPerClick, setCookiesPerClick] = useState(1);
   const [cps, setCps] = useState(0);
 
   const updateInterval = useRef();
   const updateOverride = useRef(false);
+  
 
   // TODO : ADD A LOT MORE FUNNY PHRASES
-  const phrases = [       
+  
+  const [phrases, setPhrases] = useState([       
     'Le cookie est beau n\'est-ce pas ?',
     'C\'est pour Nsigma ou quoi ?',
     'T\'a vu on a ecrit le jeu en anglais',
     'The cookie is a lie.',
     `Recette de cookie : 1 oeuf, 100g de beurre, 100g de sucre, 200g de farine, 1 pincée de sel, 1 sachet de levure, 200g de chocolat`,
-  ];
+    `Seulement ${cookies} cookies ? Pas ouf...`,
+  ]);
+  
   // TODO Add break lines in recette de cookies (\n doesn't work for some reason ?)
   // TODO Add more dynamic phrases
   // IDEA : Get random inspirationnal cookie quote from API
-  // FIXME : Fix cookie phrase not loading the right amount of cookies
-  phrases.push(`Seulement ${cookies} cookies ? Pas ouf...`)
-  const [phrase, setPhrase] = useState(phrases[0]);
 
   useEffect(() => {// useEffect is run only once when the component is mounted
     setButtonPopup(localStorage.getItem("buttonPopup") !== null ? localStorage.getItem("buttonPopup") == 'true' : true);
@@ -85,6 +88,12 @@ export default function Home({randomCode}) {
   useEffect(() => {
     updateOverride.current = false;
     window.cookies = cookies;
+    // TODO Find a better way to dynamically update the needed phrases other than using ther last phrase of phrases array
+    setPhrases(prevPhrases => {
+      const newPhrases = prevPhrases.slice(0, -1); // Crée une nouvelle copie de phrases sans la dernière phrase
+      newPhrases.push(`Seulement ${cookies} cookies ? Pas ouf...`); // Ajoute la nouvelle phrase à la fin de la nouvelle copie
+      return newPhrases;
+    });
   }, [cookies])
 
   function setCookiesOverride(i){
@@ -94,10 +103,14 @@ export default function Home({randomCode}) {
 
   useEffect(() => {
     localStorage.setItem("buttonPopup", buttonPopup ? 'true' : 'false');//Saves to localstorage to avoid having to see the dialog on every page load
-  }, [buttonPopup])
+  }, [buttonPopup]) 
 
   function increment(){
     updateOverride.current = true;
+    setClicks(prevClicks => {
+      const newClicks = [...prevClicks, Date.now()];
+      return newClicks.filter(clickTime => Date.now() - clickTime <= manualCpsDuration * 1000);
+    });
     window.cookies += cookiesPerClick
     setCookies((cookies) => {
       localStorage.setItem("cookies", cookies+cookiesPerClick);
@@ -115,9 +128,9 @@ export default function Home({randomCode}) {
 
       <main className={styles.main}>
         <CookieBackground>
-          <RandomPhrase cookies={cookies} phrases={phrases} phrase={phrase} setPhrase={setPhrase}/>
+          <RandomPhrase cookies={cookies} phrases={phrases} storeState={storeState}/>
           <Header userCode={userCode}/>
-          <Counter cookies={cookies} cps={cps}/>
+          <Counter cookies={cookies} StoreCps={cps} manualCpsDuration={manualCpsDuration} clicks={clicks}/>
           <Cookie increment={increment} cookiesPerClick={cookiesPerClick}/>
           <Popup cookies={cookies} setCookies={setCookiesOverride} trigger={buttonPopup} setTrigger={setButtonPopup} userCode={userCode} setUserCode={setUserCode} storeState={storeState} setStoreState={setStoreState} randomCode={randomCode}/>
         </CookieBackground>

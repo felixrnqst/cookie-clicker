@@ -3,7 +3,21 @@ counter.js - Created by Felix
 This formats the cookie value
 */
 import Head from 'next/head';
-export default function Counter({cookies, cps}){
+import { useState, useEffect } from 'react'
+
+export default function Counter({cookies, StoreCps, manualCpsDuration, clicks}){
+  const [manualCps, setManualCps] = useState(0);
+
+  useEffect(() => {
+    setManualCps(clicks.length / manualCpsDuration);
+  }, [clicks]);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setManualCps(clicks.filter(clickTime => Date.now() - clickTime <= manualCpsDuration * 1000).length / manualCpsDuration);
+    }, manualCpsDuration);
+    return () => clearInterval(interval);
+  }, [clicks]);
 
   function prettyDisplay(c){
     var d = 1
@@ -35,7 +49,7 @@ export default function Counter({cookies, cps}){
         <title>{prettyDisplay(cookies) + (cookies != 1 ? ' cookies' : ' cookie')}</title>
       </Head>
       <h3 style={{fontVariantNumeric: 'tabular-nums', fontSize: '1.6rem'}}>{prettyDisplay(cookies)} {cookies != 1 ? 'cookies' : 'cookie'}</h3>
-      <h4 style={{textAlign: 'center'}}>{prettyDisplay(cps.toPrecision(2))} CPS</h4>
+      <h4 style={{textAlign: 'center'}}>{prettyDisplay((manualCps + StoreCps).toPrecision(2))} CPS</h4>
     </>
   )
 }
