@@ -5,14 +5,6 @@ This creates the popup for the user either to create new account or enter their 
 import { useState, useEffect, useRef } from "react";
 import styles from './popup.module.scss'; //Uses the same styles as for the pop-up
 
-export function handlePageClose(storeState, code) {
-  // TODO : ADD WORKING LISTENER ! This one looks like very unstable and depends on user's browser
-  // Works when refresh page but not when page was closed by user.
-  window.addEventListener('beforeunload', async function(event) {
-    await savePlayerProgress(storeState, code)
-  });
-}
-
 export default function Account ({setTrigger, storeState, setStoreState, userCode, setUserCode, cookies, setCookies, randomCode}) {
   const [showAccount, setShowAccount] = useState(true);
   const [loading, setLoading] = useState(false);
@@ -29,6 +21,14 @@ export default function Account ({setTrigger, storeState, setStoreState, userCod
       clearInterval(saveInterval.current);
     }
   }, [])
+  
+  function handlePageClose(storeState, code) {
+    // TODO : ADD WORKING LISTENER ! This one looks like very unstable and depends on user's browser
+    // Works when refresh page but not when page was closed by user.
+    window.addEventListener('beforeunload', async function(event) {
+      await savePlayerProgress(code, storeState)
+    });
+  }
 
   function retreive_account_data(data) {
     setShowAccount(false);

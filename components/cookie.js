@@ -11,7 +11,7 @@ import cookie from '../public/cookie.png'
 
 import { motion, useAnimate } from 'framer-motion'
 import useSound from 'use-sound';
-
+import { prettyDisplay } from './counter'
 
 export default function Cookie(props){
   const [click, setClick] = useState(false);
@@ -20,7 +20,7 @@ export default function Cookie(props){
   const mouseListener = useRef();
 
   const [scope, animate] = useAnimate()
-  // Play a random click sound in public/audio folder
+
   const [playClickSound] = useSound('/audio/clickb' + Math.floor(Math.random() * 5 + 1) + '.mp3', { volume: 0.5 });
 
   async function tapHandler(e){
@@ -38,7 +38,7 @@ export default function Cookie(props){
 
   return (
   <div className={styles.container}>
-    <div className={styles.cursor} style={{top: coords[1], left: coords[0]}} ref={scope}>+{props.cookiesPerClick}</div>
+    <div className={styles.cursor} style={{top: coords[1], left: coords[0]}} ref={scope}>+{prettyDisplay(props.cookiesPerClick)}</div>
     <motion.div
       className={styles.hoverbox}
       whileHover={{

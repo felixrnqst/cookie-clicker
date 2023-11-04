@@ -125,17 +125,34 @@ export function prettyDisplay(c) {
 
 export default function Counter({cookies, StoreCps, manualCpsDuration, clicks, cookiesPerClick}){
   const [manualCps, setManualCps] = useState(0);
+  const [cpsDisplay, setCpsDisplay] = useState(0);
 
   useEffect(() => {
-    setManualCps(clicks.length / manualCpsDuration);
+    setManualCps(cookiesPerClick * clicks.length / manualCpsDuration);
   }, [clicks]);
 
   useEffect(() => {
     const interval = setInterval(() => {
-      setManualCps(clicks.filter(clickTime => Date.now() - clickTime <= manualCpsDuration * 1000).length / manualCpsDuration);
+      setManualCps(cookiesPerClick * clicks.filter(clickTime => Date.now() - clickTime <= manualCpsDuration * 1000).length / manualCpsDuration);
     }, manualCpsDuration);
     return () => clearInterval(interval);
   }, [clicks]);
+  
+  useEffect(() => {
+    if (manualCps + StoreCps < 1e+1) {
+      setCpsDisplay((manualCps + StoreCps).toFixed(2));
+    } else if (manualCps + StoreCps < 1e+2) {
+      setCpsDisplay((manualCps + StoreCps).toFixed(1));
+    } else if (manualCps + StoreCps < 1e+6) {
+      setCpsDisplay((manualCps + StoreCps).toFixed(0));
+    
+    } else {
+      setCpsDisplay(prettyDisplay(manualCps + StoreCps));
+    }
+    },[manualCps, StoreCps])
+  
+  
+
 
   return (
     <>
@@ -143,7 +160,7 @@ export default function Counter({cookies, StoreCps, manualCpsDuration, clicks, c
         <title>{prettyDisplay(cookies) + (cookies != 1 ? ' cookies' : ' cookie')} - Group 1 Cookie Clicker</title>
       </Head>
       <h3 style={{fontVariantNumeric: 'tabular-nums', fontSize: '1.6rem'}}>{prettyDisplay(cookies)} {cookies != 1 ? 'cookies' : 'cookie'}</h3>
-      <h4 style={{textAlign: 'center'}}>{prettyDisplay((manualCps+cookiesPerClick + StoreCps).toPrecision(2))} CPS</h4>
+      <h4 style={{textAlign: 'center'}}>{cpsDisplay} CPS</h4>
     </>
   )
 }
