@@ -5,14 +5,14 @@ The component which displays upgrades and allows the user to purchase them
 import { useState, useEffect, useRef } from 'react'
 
 import styles from './store.module.scss'
-
+import useSound from 'use-sound';
 
 const freq = 1000/60
 
 export default function Store(props) {
   const interval = useRef()
   const timer = useRef(0)
-
+  const [playStoreSound] = useSound('/audio/buy' + Math.floor(Math.random() * 4 + 1) + '.mp3', { volume: 0.5 });
   useEffect(() => {
     interval.current = setInterval(loop, freq);
     return () => {
@@ -25,6 +25,7 @@ export default function Store(props) {
     if(props.cookies < Math.floor(u.price * (1 + 0.1 * props.storeState[u.name]))){
       return;
     }
+    playStoreSound();
     window.cookies = props.cookies - Math.floor(u.price * (1 + 0.1 * props.storeState[u.name]))
     props.setCookies(props.cookies - Math.floor(u.price * (1 + 0.1 * props.storeState[u.name])))
     props.setStoreState(s => {
@@ -37,6 +38,7 @@ export default function Store(props) {
     if(props.storeState[i] <= 0){
       return;
     }
+    playStoreSound();
     window.cookies = props.cookies + Math.floor(u.price * (1 + 0.1 * (props.storeState[u.name] - 1)))
     props.setCookies(props.cookies + Math.floor(u.price * (1 + 0.1 * (props.storeState[u.name] - 1))))
     props.setStoreState(s => {
@@ -78,6 +80,11 @@ export default function Store(props) {
             </div>
           </div>
           <div className={styles.info}>
+          <div className={styles.upgradesImages}>
+            {Array.from({ length: props.storeState[u.name] }, (_, i) => (
+              <img key={i} className={styles.storeImage} src={u.imagePath} />
+            ))}
+          </div>
           {(typeof u.cps != 'undefined' &&u.cps > 0) && '+' + u.cps + ' CPS'}
           {(typeof u.mult != 'undefined' && u.mult > 1) && 'Click multiplier x' + u.mult}
           </div>

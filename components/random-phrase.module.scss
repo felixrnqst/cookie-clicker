@@ -1,0 +1,15 @@
+.phrase {
+    position: absolute;
+    font-size: 1em;
+    color: #000;
+    text-align: center;
+    transition: color 0.5s;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+.phrase:hover {
+    color: #f00;
+}
