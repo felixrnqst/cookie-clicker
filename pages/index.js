@@ -11,21 +11,17 @@ import Header from '../components/header'
 import CookieBackground from '../components/cookie-background'
 import Counter from '../components/counter'
 import Cookie from '../components/cookie'
-import Store from '../components/store'
+import Store, { upgrades } from '../components/store'
 import Popup from '../components/popup'
 import RandomPhrase from '../components/random-phrase'
-import GoldenCookie from '../components/golden-cookie'
+// import GoldenCookie from '../components/golden-cookie'
 
 import { prettyDisplay } from '../components/counter'
 
 import { getRandomCode } from './api/code'
 
 export default function Home({randomCode}) {
-  const upgrades = [
-    {name: 'Autoclick', description: 'Clicks the cookie automatically for you', price: 20, quantity: 0, max: -1, cps: 0.1, imagePath: '/autoclick.png'},
-    {name: 'Multiplier', description: 'Multiplies the amount of cookies a click produces', price: 100, quantitiy: 0, max: -1, cps: 0, mult: 1.5, imagePath: '/multiplier.png'},
-    {name: 'Bakery', description: 'An artisanal bakery that produces fresh cookies', price: 200, quantitiy: 0, max: -1, cps: 5, imagePath: '/bakery.png'},
-  ]
+
   const [cookies, setCookies] = useState(0);
   const [buttonPopup, setButtonPopup] = useState(false);
   const [userCode, setUserCode] = useState('');
@@ -47,7 +43,7 @@ export default function Home({randomCode}) {
     'C\'est pour Nsigma ou quoi ?',
     'T\'as vu on a ecrit le jeu en anglais',
     'The cookie is a lie.',
-    <>Recette de cookie : <br/>1 oeuf,<br/> 100g de beurre,<br/> 100g de sucre,<br/> 200g de farine,<br/> 1 pincée de sel,<br/> 1 sachet de levure,<br/> 200g de chocolat<br/></>,
+    <>Recette de cookie : <br/>1 oeuf,<br/> 100g de beurre,<br/> 100g de sucre,<br/> 200g de farine,<br/> 1 pincee de sel,<br/> 1 sachet de levure,<br/> 200g de chocolat<br/></>,
     `Seulement ${prettyDisplay(cookies)} cookies ? Pas ouf...`,
   ]);
 
@@ -146,10 +142,10 @@ export default function Home({randomCode}) {
           <Header userCode={userCode}/>
           <Counter cookies={cookies} StoreCps={cps} manualCpsDuration={manualCpsDuration} clicks={clicks} cookiesPerClick={cookiesPerClick}/>
           <Cookie increment={increment} cookiesPerClick={cookiesPerClick}/>
-          <GoldenCookie setCookies={setCookies} />
+          {/*<GoldenCookie setCookies={setCookies} />*/}
           <Popup cookies={cookies} setCookies={setCookiesOverride} trigger={buttonPopup} setTrigger={setButtonPopup} userCode={userCode} setUserCode={setUserCode} storeState={storeState} setStoreState={setStoreState} randomCode={randomCode}/>
         </CookieBackground>
-        <Store cookies={cookies} setCookies={setCookiesOverride} upgrades={upgrades} storeState={storeState} setStoreState={setStoreState}/>
+        <Store cookies={cookies} setCookies={setCookiesOverride} storeState={storeState} setStoreState={setStoreState}/>
 
       </main>
 

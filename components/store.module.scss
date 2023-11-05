@@ -1,9 +1,10 @@
 @import '../styles/constants.scss';
 
-.container {width: 100vw; height: 100vh; background: #3d1601;
+.container {width: 100vw; height: 100vh; background: #3d1601; display: flex; flex-direction: column;
   border-left: .5rem solid #782c00;
   overflow-y: scroll;
   * {color: white; }
+  .upgrades {flex-grow: 1; overflow-y: scroll; }
 }
 
 @include bp(md){
@@ -18,10 +19,18 @@
   border-bottom: 2px solid black;
 }
 .info {display: none;}
-.upgradesImages{margin-bottom: 10px;}
+.upgradesImages:not(.visible) {display: none; }
+.upgradesImages {margin-bottom: .5rem; overflow-x: scroll; display: flex; height: 4rem;
+  .storeImage {
+    width: 4rem;
+    height: 4rem;
+  }
+}
 .storeItem:hover .info {display: block; }
 
-.storeItemRow {display: flex; justify-content: space-around; align-items: center; }
+.storeItemRow {display: flex; justify-content: space-around; align-items: center;
+  p {width: 80%; }
+}
 .counter {display: flex;
   span {padding: .5rem; }
   .change {text-shadow: 2px 2px #000A;
@@ -29,9 +38,4 @@
   .change:not(.active):hover {cursor: default; }
   .change.active {background: #782c00; }
   .change.active:hover {box-shadow: inset -2px -4px #0004, inset 2px 2px #FFF5; cursor: pointer; color: #FFFFA0;}
-}
-
-.storeImage {
-  width: 3vw;
-  height: 3vw;
 }
