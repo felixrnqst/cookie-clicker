@@ -35,6 +35,18 @@ export default function Home({randomCode}) {
   const updateOverride = useRef(false);
 
   useEffect(() => {// useEffect is run only once when the component is mounted
+
+  console.log('  ____            _    _      ')
+  console.log(' / ___|___   ___ | | _(_) ___ ')
+  console.log('| |   / _ \\ / _ \\| |/ / |/ _ \\')
+  console.log('| |__| (_) | (_) |   <| |  __/')
+  console.log(' \\____\\___/ \\___/|_|\\_\\_|\\___|')
+  console.log('__________________      ______              ')
+  console.log('__  ____/__  /__(_)________  /______________')
+  console.log('_  /    __  /__  /_  ___/_  //_/  _ \\_  ___/')
+  console.log('/ /___  _  / _  / / /__ _  ,<  /  __/  /    ')
+  console.log('\\____/  /_/  /_/  \\___/ /_/|_| \\___//_/     ')
+  console.log('Built by Guillaume, Felix, Étienne, Matthieu')
     setButtonPopup(localStorage.getItem("buttonPopup") !== null ? localStorage.getItem("buttonPopup") == 'true' : true);
     window.cookies = cookies; //We want to use window.cookies to be able to "hack" the game in the console
     setCookies(cookies);
