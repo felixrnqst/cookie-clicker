@@ -14,7 +14,6 @@ import Cookie from '../components/cookie'
 import Store from '../components/store'
 import Popup from '../components/popup'
 import RandomPhrase from '../components/random-phrase'
-import GoldenCookie from '../components/golden-cookie'
 
 import { prettyDisplay } from '../components/counter'
 
@@ -40,19 +39,6 @@ export default function Home({randomCode}) {
   const updateOverride = useRef(false);
 
 
-  // TODO : ADD A LOT MORE FUNNY PHRASES
-
-  const [phrases, setPhrases] = useState([
-    'Le cookie est beau n\'est-ce pas ?',
-    'C\'est pour Nsigma ou quoi ?',
-    'T\'as vu on a ecrit le jeu en anglais',
-    'The cookie is a lie.',
-    <>Recette de cookie : <br/>1 oeuf,<br/> 100g de beurre,<br/> 100g de sucre,<br/> 200g de farine,<br/> 1 pincée de sel,<br/> 1 sachet de levure,<br/> 200g de chocolat<br/></>,
-    `Seulement ${prettyDisplay(cookies)} cookies ? Pas ouf...`,
-  ]);
-
-  // DONE: Add break lines in recette de cookies (\n doesn't work for some reason ?) - in html one has to use <br>
-  // TODO Add more dynamic phrases
   // IDEA : Get random inspirational cookie quote from API
 
   useEffect(() => {// useEffect is run only once when the component is mounted
@@ -102,12 +88,6 @@ export default function Home({randomCode}) {
   useEffect(() => {
     updateOverride.current = false;
     window.cookies = cookies;
-    // TODO Find a better way to dynamically update the needed phrases other than using ther last phrase of phrases array
-    setPhrases(prevPhrases => {
-      const newPhrases = prevPhrases.slice(0, -1); // Crée une nouvelle copie de phrases sans la dernière phrase
-      newPhrases.push(`Seulement ${prettyDisplay(cookies)} cookies ? Pas ouf...`); // Ajoute la nouvelle phrase à la fin de la nouvelle copie
-      return newPhrases;
-    });
   }, [cookies])
 
   function setCookiesOverride(i){
@@ -142,11 +122,11 @@ export default function Home({randomCode}) {
 
       <main className={styles.main}>
         <CookieBackground>
-          <RandomPhrase phrases={phrases}/>
+          <RandomPhrase cookies={cookies}/>
           <Header userCode={userCode}/>
           <Counter cookies={cookies} StoreCps={cps} manualCpsDuration={manualCpsDuration} clicks={clicks} cookiesPerClick={cookiesPerClick}/>
           <Cookie increment={increment} cookiesPerClick={cookiesPerClick}/>
-          <GoldenCookie setCookies={setCookies} />
+          
           <Popup cookies={cookies} setCookies={setCookiesOverride} trigger={buttonPopup} setTrigger={setButtonPopup} userCode={userCode} setUserCode={setUserCode} storeState={storeState} setStoreState={setStoreState} randomCode={randomCode}/>
         </CookieBackground>
         <Store cookies={cookies} setCookies={setCookiesOverride} upgrades={upgrades} storeState={storeState} setStoreState={setStoreState}/>
