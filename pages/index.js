@@ -38,22 +38,22 @@ export default function Home({randomCode}) {
 
   const updateInterval = useRef();
   const updateOverride = useRef(false);
-  
+
 
   // TODO : ADD A LOT MORE FUNNY PHRASES
-  
-  const [phrases, setPhrases] = useState([       
+
+  const [phrases, setPhrases] = useState([
     'Le cookie est beau n\'est-ce pas ?',
     'C\'est pour Nsigma ou quoi ?',
-    'T\'a vu on a ecrit le jeu en anglais',
+    'T\'as vu on a ecrit le jeu en anglais',
     'The cookie is a lie.',
-    `Recette de cookie : 1 oeuf, 100g de beurre, 100g de sucre, 200g de farine, 1 pincée de sel, 1 sachet de levure, 200g de chocolat`,
+    <>Recette de cookie : <br/>1 oeuf,<br/> 100g de beurre,<br/> 100g de sucre,<br/> 200g de farine,<br/> 1 pincée de sel,<br/> 1 sachet de levure,<br/> 200g de chocolat<br/></>,
     `Seulement ${prettyDisplay(cookies)} cookies ? Pas ouf...`,
   ]);
-  
-  // TODO Add break lines in recette de cookies (\n doesn't work for some reason ?)
+
+  // DONE: Add break lines in recette de cookies (\n doesn't work for some reason ?) - in html one has to use <br>
   // TODO Add more dynamic phrases
-  // IDEA : Get random inspirationnal cookie quote from API
+  // IDEA : Get random inspirational cookie quote from API
 
   useEffect(() => {// useEffect is run only once when the component is mounted
 
@@ -117,7 +117,7 @@ export default function Home({randomCode}) {
 
   useEffect(() => {
     localStorage.setItem("buttonPopup", buttonPopup ? 'true' : 'false');//Saves to localstorage to avoid having to see the dialog on every page load
-  }, [buttonPopup]) 
+  }, [buttonPopup])
 
   function increment(){
     updateOverride.current = true;
@@ -142,7 +142,7 @@ export default function Home({randomCode}) {
 
       <main className={styles.main}>
         <CookieBackground>
-          <RandomPhrase cookies={cookies} phrases={phrases} storeState={storeState}/>
+          <RandomPhrase phrases={phrases}/>
           <Header userCode={userCode}/>
           <Counter cookies={cookies} StoreCps={cps} manualCpsDuration={manualCpsDuration} clicks={clicks} cookiesPerClick={cookiesPerClick}/>
           <Cookie increment={increment} cookiesPerClick={cookiesPerClick}/>

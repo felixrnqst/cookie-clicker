@@ -15,6 +15,7 @@ export default function RandomPhrase({phrases}) {
     const phraseChangeDuration = 6; //s
 
     useEffect(() => {
+      console.log(phrases)
         setCurrentPhrase(phrases[randomIndex]);
     }, [phrases, randomIndex]);
 
