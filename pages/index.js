@@ -14,7 +14,6 @@ import Cookie from '../components/cookie'
 import Store, { upgrades } from '../components/store'
 import Popup from '../components/popup'
 import RandomPhrase from '../components/random-phrase'
-// import GoldenCookie from '../components/golden-cookie'
 
 import { prettyDisplay, displayCps } from '../components/counter'
 
@@ -105,12 +104,6 @@ export default function Home({randomCode}) {
   useEffect(() => {
     updateOverride.current = false;
     window.cookies = cookies;
-    // DONE: Dynamic phrases will be in the beginning of the array, ho
-    // setPhrases(prevPhrases => {
-    //   var newPhrases = [...prevPhrases] //Copy array to mutable variable
-    //   newPhrases[0] = `Seulement ${prettyDisplay(cookies)} cookies ? Pas ouf...`
-    //   return newPhrases;
-    // });
   }, [cookies])
 
   // useEffect(() => {
@@ -167,7 +160,7 @@ export default function Home({randomCode}) {
           <Header userCode={userCode}/>
           <Counter cookies={cookies} storeCps={cps} manualCps={manualCps} cookiesPerClick={cookiesPerClick}/>
           <Cookie increment={increment} cookiesPerClick={cookiesPerClick}/>
-          {/*<GoldenCookie setCookies={setCookies} />*/}
+
           <Popup cookies={cookies} setCookies={setCookiesOverride} trigger={buttonPopup} setTrigger={setButtonPopup} userCode={userCode} setUserCode={setUserCode} storeState={storeState} setStoreState={setStoreState} randomCode={randomCode}/>
         </CookieBackground>
         <Store cookies={cookies} setCookies={setCookiesOverride} storeState={storeState} setStoreState={setStoreState}/>

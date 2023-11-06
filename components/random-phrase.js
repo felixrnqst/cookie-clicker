@@ -6,6 +6,7 @@ Add random floating phrase around the cookie
 import { useState, useEffect, useRef } from 'react';
 import { motion } from 'framer-motion';
 import styles from "./random-phrase.module.scss"
+import { prettyDisplay } from './counter';
 
 export default function RandomPhrase({phrases, cps, prettyCookies}) {
     const [randomYStart, setRandomYStart] = useState(0);
