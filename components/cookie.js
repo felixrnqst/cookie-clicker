@@ -38,7 +38,7 @@ export default function Cookie(props){
 
   return (
   <div className={styles.container}>
-    <div className={styles.cursor} style={{top: coords[1], left: coords[0]}} ref={scope}>+{prettyDisplay(props.cookiesPerClick)}</div>
+    <div className={styles.cursor} style={{top: coords[1], left: coords[0]}} ref={scope}>+{prettyDisplay(props.cookiesPerClick * props.CPSTemporaryMultiplier)}</div>
     <motion.div
       className={styles.hoverbox}
       whileHover={{

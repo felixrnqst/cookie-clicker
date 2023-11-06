@@ -135,11 +135,11 @@ export function displayCps(cps){
 }
 
 
-export default function Counter({cookies, storeCps, manualCps, cookiesPerClick}){
+export default function Counter({cookies, storeCps, manualCps, CPSTemporaryMultiplier}){
   const [cpsDisplay, setCpsDisplay] = useState(0);
   useEffect(() => {
-    setCpsDisplay(displayCps(manualCps + storeCps))
-  },[manualCps, storeCps])
+    setCpsDisplay(displayCps((manualCps + storeCps) * CPSTemporaryMultiplier))
+  },[CPSTemporaryMultiplier, manualCps, storeCps])
 
   return (
     <>

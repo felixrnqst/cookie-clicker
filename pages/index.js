@@ -4,7 +4,6 @@ This is the main page on the website and it will display the cookie clicker game
 */
 import { useState, useEffect, useRef } from 'react'
 import Head from 'next/head'
-import Image from 'next/image'
 import styles from '../styles/Home.module.scss'
 
 import Header from '../components/header'
@@ -14,6 +13,7 @@ import Cookie from '../components/cookie'
 import Store, { upgrades } from '../components/store'
 import Popup from '../components/popup'
 import RandomPhrase from '../components/random-phrase'
+import RandomEvent from 'components/random-event'
 
 import { prettyDisplay, displayCps } from '../components/counter'
 
@@ -32,6 +32,8 @@ export default function Home({randomCode}) {
 
   const [cookiesPerClick, setCookiesPerClick] = useState(1);
   const [cps, setCps] = useState(0);
+
+  const [CPSTemporaryMultiplier, setCPSTemporaryMultiplier] = useState(1);
 
   const updateInterval = useRef();
   const clickInterval = useRef();
@@ -130,10 +132,10 @@ export default function Home({randomCode}) {
       newClicks = newClicks.filter(clickTime => Date.now() - clickTime <= manualCpsDuration * 1000);
       return newClicks;
     });
-    window.cookies += cookiesPerClick
+    window.cookies += cookiesPerClick * CPSTemporaryMultiplier
     setCookies((cookies) => {
-      localStorage.setItem("cookies", cookies+cookiesPerClick);
-      return cookies+cookiesPerClick;
+      localStorage.setItem("cookies", cookies+(cookiesPerClick * CPSTemporaryMultiplier));
+      return cookies+(cookiesPerClick * CPSTemporaryMultiplier);
     })
 
   }
@@ -158,9 +160,9 @@ export default function Home({randomCode}) {
         <CookieBackground>
           <RandomPhrase phrases={phrases} cps={displayCps(cps + manualCps)} prettyCookies={prettyDisplay(cookies)}/>
           <Header userCode={userCode}/>
-          <Counter cookies={cookies} storeCps={cps} manualCps={manualCps} cookiesPerClick={cookiesPerClick}/>
-          <Cookie increment={increment} cookiesPerClick={cookiesPerClick}/>
-
+          <Counter cookies={cookies} storeCps={cps} manualCps={manualCps} cookiesPerClick={cookiesPerClick} CPSTemporaryMultiplier={CPSTemporaryMultiplier}/>
+          <Cookie increment={increment} cookiesPerClick={cookiesPerClick} CPSTemporaryMultiplier={CPSTemporaryMultiplier}/>
+          <RandomEvent CPSTemporaryMultiplier={CPSTemporaryMultiplier} setCPSTemporaryMultiplier={setCPSTemporaryMultiplier}/>
           <Popup cookies={cookies} setCookies={setCookiesOverride} trigger={buttonPopup} setTrigger={setButtonPopup} userCode={userCode} setUserCode={setUserCode} storeState={storeState} setStoreState={setStoreState} randomCode={randomCode}/>
         </CookieBackground>
         <Store cookies={cookies} setCookies={setCookiesOverride} storeState={storeState} setStoreState={setStoreState}/>

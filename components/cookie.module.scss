@@ -11,8 +11,12 @@
 }
 .cursor:hover {cursor: default; }
 
-.cookie {clip-path: inset(3.5vh round 50%); }
-
+.cookie {clip-path: inset(3.5vh round 50%); 
+  cursor: pointer;    
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;}
 
 @include bp(md){
   .container .hoverbox {width: 30vh; height: 30vh; }
