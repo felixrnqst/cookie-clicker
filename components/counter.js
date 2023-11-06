@@ -122,37 +122,24 @@ export function prettyDisplay(c) {
   return c.toString();
 }
 
+export function displayCps(cps){
+  if (cps < 1e+1) {
+    return cps.toFixed(2);
+  } else if (cps < 1e+2) {
+    return cps.toFixed(1);
+  } else if (cps < 1e+6) {
+    return cps.toFixed(0);
+  } else {
+    return prettyDisplay(cps);
+  }
+}
 
-export default function Counter({cookies, StoreCps, manualCpsDuration, clicks, cookiesPerClick}){
-  const [manualCps, setManualCps] = useState(0);
+
+export default function Counter({cookies, storeCps, manualCps, cookiesPerClick}){
   const [cpsDisplay, setCpsDisplay] = useState(0);
-
   useEffect(() => {
-    setManualCps(cookiesPerClick * clicks.length / manualCpsDuration);
-  }, [clicks]);
-
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setManualCps(cookiesPerClick * clicks.filter(clickTime => Date.now() - clickTime <= manualCpsDuration * 1000).length / manualCpsDuration);
-    }, manualCpsDuration);
-    return () => clearInterval(interval);
-  }, [clicks]);
-
-  useEffect(() => {
-    if (manualCps + StoreCps < 1e+1) {
-      setCpsDisplay((manualCps + StoreCps).toFixed(2));
-    } else if (manualCps + StoreCps < 1e+2) {
-      setCpsDisplay((manualCps + StoreCps).toFixed(1));
-    } else if (manualCps + StoreCps < 1e+6) {
-      setCpsDisplay((manualCps + StoreCps).toFixed(0));
-
-    } else {
-      setCpsDisplay(prettyDisplay(manualCps + StoreCps));
-    }
-    },[manualCps, StoreCps])
-
-
-
+    setCpsDisplay(displayCps(manualCps + storeCps))
+  },[manualCps, storeCps])
 
   return (
     <>

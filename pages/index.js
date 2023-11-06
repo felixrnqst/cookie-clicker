@@ -16,7 +16,7 @@ import Popup from '../components/popup'
 import RandomPhrase from '../components/random-phrase'
 // import GoldenCookie from '../components/golden-cookie'
 
-import { prettyDisplay } from '../components/counter'
+import { prettyDisplay, displayCps } from '../components/counter'
 
 import { getRandomCode } from './api/code'
 
@@ -28,24 +28,31 @@ export default function Home({randomCode}) {
   const [storeState, setStoreState] = useState(Object.fromEntries(upgrades.map(i => [i.name, 0])));
 
   const [clicks, setClicks] = useState([]);
-  const manualCpsDuration = 1 //s
+  const manualCpsDuration = 1 // in seconds
+  const [manualCps, setManualCps] = useState(0);
+
   const [cookiesPerClick, setCookiesPerClick] = useState(1);
   const [cps, setCps] = useState(0);
 
   const updateInterval = useRef();
+  const clickInterval = useRef();
   const updateOverride = useRef(false);
 
 
   // TODO : ADD A LOT MORE FUNNY PHRASES
 
-  const [phrases, setPhrases] = useState([
+  // const [phrases, setPhrases] = useState([
+  const phrases = [
+    (props) => `Seulement ${props.prettyCookies} cookies ? Pas ouf...`,
+    (props) => `${props.cps} cookies per second? ${props.cps > 10 ? 'Great!' : 'You can do better...'}`,
     'Le cookie est beau n\'est-ce pas ?',
     'C\'est pour Nsigma ou quoi ?',
     'T\'as vu on a ecrit le jeu en anglais',
     'The cookie is a lie.',
     <>Recette de cookie : <br/>1 oeuf,<br/> 100g de beurre,<br/> 100g de sucre,<br/> 200g de farine,<br/> 1 pincee de sel,<br/> 1 sachet de levure,<br/> 200g de chocolat<br/></>,
-    `Seulement ${prettyDisplay(cookies)} cookies ? Pas ouf...`,
-  ]);
+  ]
+
+  // ]);
 
   // DONE: Add break lines in recette de cookies (\n doesn't work for some reason ?) - in html one has to use <br>
   // TODO Add more dynamic phrases
@@ -98,13 +105,21 @@ export default function Home({randomCode}) {
   useEffect(() => {
     updateOverride.current = false;
     window.cookies = cookies;
-    // TODO Find a better way to dynamically update the needed phrases other than using ther last phrase of phrases array
-    setPhrases(prevPhrases => {
-      const newPhrases = prevPhrases.slice(0, -1); // Crée une nouvelle copie de phrases sans la dernière phrase
-      newPhrases.push(`Seulement ${prettyDisplay(cookies)} cookies ? Pas ouf...`); // Ajoute la nouvelle phrase à la fin de la nouvelle copie
-      return newPhrases;
-    });
+    // DONE: Dynamic phrases will be in the beginning of the array, ho
+    // setPhrases(prevPhrases => {
+    //   var newPhrases = [...prevPhrases] //Copy array to mutable variable
+    //   newPhrases[0] = `Seulement ${prettyDisplay(cookies)} cookies ? Pas ouf...`
+    //   return newPhrases;
+    // });
   }, [cookies])
+
+  // useEffect(() => {
+  //   setPhrases(prevPhrases => {
+  //     var newPhrases = [...prevPhrases] //Copy array to mutable variable
+  //     newPhrases[1] = `${cps} cookies per second? ${cps > 10 ? 'Great!' : 'You can do better...'}`
+  //     return newPhrases;
+  //   });
+  // }, [cps])
 
   function setCookiesOverride(i){
     updateOverride.current = true;
@@ -117,9 +132,10 @@ export default function Home({randomCode}) {
 
   function increment(){
     updateOverride.current = true;
-    setClicks(prevClicks => {
-      const newClicks = [...prevClicks, Date.now()];
-      return newClicks.filter(clickTime => Date.now() - clickTime <= manualCpsDuration * 1000);
+    setClicks((prevClicks) => {
+      var newClicks = [...prevClicks, Date.now()];
+      newClicks = newClicks.filter(clickTime => Date.now() - clickTime <= manualCpsDuration * 1000);
+      return newClicks;
     });
     window.cookies += cookiesPerClick
     setCookies((cookies) => {
@@ -128,6 +144,15 @@ export default function Home({randomCode}) {
     })
 
   }
+
+  useEffect(() => {
+
+    clickInterval.current = setInterval(() => {
+      setManualCps(cookiesPerClick * clicks.filter(clickTime => Date.now() - clickTime <= manualCpsDuration * 1000).length / manualCpsDuration);
+    }, manualCpsDuration);
+    setManualCps(cookiesPerClick * clicks.length / manualCpsDuration);
+    return () => clearInterval(clickInterval.current);
+  }, [clicks]);
 
   return (
     <div className={styles.container}>
@@ -138,9 +163,9 @@ export default function Home({randomCode}) {
 
       <main className={styles.main}>
         <CookieBackground>
-          <RandomPhrase phrases={phrases}/>
+          <RandomPhrase phrases={phrases} cps={displayCps(cps + manualCps)} prettyCookies={prettyDisplay(cookies)}/>
           <Header userCode={userCode}/>
-          <Counter cookies={cookies} StoreCps={cps} manualCpsDuration={manualCpsDuration} clicks={clicks} cookiesPerClick={cookiesPerClick}/>
+          <Counter cookies={cookies} storeCps={cps} manualCps={manualCps} cookiesPerClick={cookiesPerClick}/>
           <Cookie increment={increment} cookiesPerClick={cookiesPerClick}/>
           {/*<GoldenCookie setCookies={setCookies} />*/}
           <Popup cookies={cookies} setCookies={setCookiesOverride} trigger={buttonPopup} setTrigger={setButtonPopup} userCode={userCode} setUserCode={setUserCode} storeState={storeState} setStoreState={setStoreState} randomCode={randomCode}/>

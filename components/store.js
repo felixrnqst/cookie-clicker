@@ -53,7 +53,7 @@ export default function Store(props) {
       <h3>Upgrades</h3>
       <div className={styles.upgrades}>
         {upgrades.map(u =>
-          <Upgrade item={u} storeState={props.storeState} cookies={props.cookies} setCookies={props.setCookies} setStoreState={props.setStoreState}/>
+          <Upgrade key={u.name} item={u} storeState={props.storeState} cookies={props.cookies} setCookies={props.setCookies} setStoreState={props.setStoreState}/>
         )}
       </div>
     </div>
@@ -89,10 +89,10 @@ function Upgrade(props){
       return s
     })
   }
-  if(props.cookies < props.item.price * 0.9 && props.storeState[props.item.name] <= 0){
+  if(props.cookies < props.item.price * 0.9 && props.storeState[props.item.name] <= 0 && props.item.name != 'Autoclick'){
     return ""
   }
-  if(props.cookies >= props.item.price * 0.9 && props.cookies < props.item.price && props.storeState[props.item.name] <= 0){
+  if(props.cookies >= props.item.price * 0.9 && props.cookies < props.item.price && props.storeState[props.item.name] <= 0 && props.item.name != 'Autoclick'){
     return (
       <div className={styles.storeItem} key={props.item.name}>
         <h4>?? 🍪</h4>
@@ -108,7 +108,7 @@ function Upgrade(props){
     )
   }
   return (
-    <div className={styles.storeItem} key={props.item.name}>
+    <div className={styles.storeItem}>
       <h4>{props.item.name} 🍪{Math.floor(props.item.price * (1 + 0.1 * props.storeState[props.item.name]))}</h4>
       <div className={styles.storeItemRow}>
         <p>{props.item.description}</p>
