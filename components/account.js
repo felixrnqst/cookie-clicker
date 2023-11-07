@@ -17,11 +17,17 @@ export default function Account ({setTrigger, storeState, setStoreState, userCod
   const save_delay = 2; // Save user data to DB every x seconds
 
   useEffect(() => {
+    if(localStorage.getItem('code') !== null){
+      setShowAccount(false);
+      login(localStorage.getItem('code'));
+    }else{
+      setShowAccount(true);
+    }
     return () => {//Cleanup function
       clearInterval(saveInterval.current);
     }
   }, [])
-  
+
   function handlePageClose(storeState, code) {
     // TODO : ADD WORKING LISTENER ! This one looks like very unstable and depends on user's browser
     // Works when refresh page but not when page was closed by user.
@@ -106,6 +112,8 @@ export default function Account ({setTrigger, storeState, setStoreState, userCod
           retreive_account_data(json.data, storeState)
         }else{
           console.log("Code isn't valid!")
+          codeRef.current.value = code;
+          setShowAccount(true);
         }
       }else{
         setErrorMessage(json.error);

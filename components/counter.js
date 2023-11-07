@@ -119,6 +119,9 @@ export function prettyDisplay(c) {
       return (Math.floor(c / divisor * 1000) / 1000) + ' ' + name;
     }
   }
+  if(c == null){
+    return 0
+  }
   return c.toString();
 }
 
@@ -144,7 +147,7 @@ export default function Counter({cookies, storeCps, manualCps, CPSTemporaryMulti
   return (
     <>
       <Head>
-        <title>{prettyDisplay(cookies) + (cookies != 1 ? ' cookies' : ' cookie')} - Group 1 Cookie Clicker</title>
+        <title>{prettyDisplay(cookies) + (cookies != 1 ? ' cookies' : ' cookie') + ' - Group 1 Cookie Clicker'}</title>
       </Head>
       <h3 style={{fontVariantNumeric: 'tabular-nums', fontSize: '1.6rem'}}>{prettyDisplay(cookies)} {cookies != 1 ? 'cookies' : 'cookie'}</h3>
       <h4 style={{textAlign: 'center'}}>{cpsDisplay} CPS</h4>
