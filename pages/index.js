@@ -23,6 +23,7 @@ export default function Home({randomCode}) {
 
   const [cookies, setCookies] = useState(0);
   const [buttonPopup, setButtonPopup] = useState(false);
+  const [accountPopup, setAccountPopup] = useState(false);
   const [userCode, setUserCode] = useState('');
   const [storeState, setStoreState] = useState(Object.fromEntries(upgrades.map(i => [i.name, 0])));
 
@@ -72,9 +73,13 @@ export default function Home({randomCode}) {
   console.log('/ /___  _  / _  / / /__ _  ,<  /  __/  /    ')
   console.log('\\____/  /_/  /_/  \\___/ /_/|_| \\___//_/     ')
   console.log('Built by Guillaume, Felix, Étienne, Matthieu')
-    setButtonPopup(localStorage.getItem("buttonPopup") !== null ? localStorage.getItem("buttonPopup") == 'true' : true);
+
+    if(localStorage.getItem('mode') === 'local' && localStorage.getItem('cookies') !== 'null'){
+      setCookies(parseInt(localStorage.getItem('cookies')))
+    }
+
     window.cookies = cookies; //We want to use window.cookies to be able to "hack" the game in the console
-    setCookies(cookies);
+
     updateInterval.current = setInterval(() => {
       var cook = 0;
       setCookies((i) => {
@@ -106,6 +111,7 @@ export default function Home({randomCode}) {
   useEffect(() => {
     updateOverride.current = false;
     window.cookies = cookies;
+    localStorage.setItem('cookies', cookies)
   }, [cookies])
 
   // useEffect(() => {
@@ -159,11 +165,11 @@ export default function Home({randomCode}) {
       <main className={styles.main}>
         <CookieBackground>
           <RandomPhrase phrases={phrases} cps={displayCps(cps + manualCps)} prettyCookies={prettyDisplay(cookies)}/>
-          <Header userCode={userCode}/>
+          <Header userCode={userCode} showPopup={() => typeof userCode == '' ? setButtonPopup(true) : setAccountPopup(true)}/>
           <Counter cookies={cookies} storeCps={cps} manualCps={manualCps} cookiesPerClick={cookiesPerClick} CPSTemporaryMultiplier={CPSTemporaryMultiplier}/>
           <Cookie increment={increment} cookiesPerClick={cookiesPerClick} CPSTemporaryMultiplier={CPSTemporaryMultiplier}/>
           <RandomEvent CPSTemporaryMultiplier={CPSTemporaryMultiplier} setCPSTemporaryMultiplier={setCPSTemporaryMultiplier}/>
-          <Popup cookies={cookies} setCookies={setCookiesOverride} trigger={buttonPopup} setTrigger={setButtonPopup} userCode={userCode} setUserCode={setUserCode} storeState={storeState} setStoreState={setStoreState} randomCode={randomCode}/>
+          <Popup cookies={cookies} setCookies={setCookiesOverride} trigger={buttonPopup} setTrigger={setButtonPopup} accountPopup={accountPopup} setAccountPopup={setAccountPopup} userCode={userCode} setUserCode={setUserCode} storeState={storeState} setStoreState={setStoreState} randomCode={randomCode}/>
         </CookieBackground>
         <Store cookies={cookies} setCookies={setCookiesOverride} storeState={storeState} setStoreState={setStoreState}/>
 

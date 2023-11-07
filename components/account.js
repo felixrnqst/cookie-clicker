@@ -5,8 +5,8 @@ This creates the popup for the user either to create new account or enter their 
 import { useState, useEffect, useRef } from "react";
 import styles from './popup.module.scss'; //Uses the same styles as for the pop-up
 
-export default function Account ({setTrigger, storeState, setStoreState, userCode, setUserCode, cookies, setCookies, randomCode}) {
-  const [showAccount, setShowAccount] = useState(true);
+export default function Account ({accountPopup, setAccountPopup, storeState, setStoreState, userCode, setUserCode, cookies, setCookies, randomCode}) {
+  // const [accountPopup, setAccountPopup] = useState(true);
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
@@ -18,15 +18,21 @@ export default function Account ({setTrigger, storeState, setStoreState, userCod
 
   useEffect(() => {
     if(localStorage.getItem('code') !== null){
-      setShowAccount(false);
+      setAccountPopup(false);
       login(localStorage.getItem('code'));
     }else{
-      setShowAccount(true);
+      setAccountPopup(true);
     }
     return () => {//Cleanup function
       clearInterval(saveInterval.current);
     }
   }, [])
+
+  useEffect(() => {
+    if(codeRef.current != null && userCode != '' && userCode != 'null'){
+      codeRef.current.value = userCode
+    }
+  }, [accountPopup])
 
   function handlePageClose(storeState, code) {
     // TODO : ADD WORKING LISTENER ! This one looks like very unstable and depends on user's browser
@@ -37,7 +43,7 @@ export default function Account ({setTrigger, storeState, setStoreState, userCod
   }
 
   function retreive_account_data(data) {
-    setShowAccount(false);
+    setAccountPopup(false);
     console.log(data)
     setCookies(data.cookies)
     localStorage.setItem("cookies", data.cookies);
@@ -77,7 +83,7 @@ export default function Account ({setTrigger, storeState, setStoreState, userCod
     setCookies(0);
     saveInterval.current = setInterval(() => savePlayerProgress(randomCode, storeState), save_delay * 1000); // save_delay in seconds
 
-    setShowAccount(false);
+    setAccountPopup(false);
     // Listener to save user data when they leave the website
     handlePageClose(storeState, randomCode)
   }
@@ -113,7 +119,7 @@ export default function Account ({setTrigger, storeState, setStoreState, userCod
         }else{
           console.log("Code isn't valid!")
           codeRef.current.value = code;
-          setShowAccount(true);
+          setAccountPopup(true);
         }
       }else{
         setErrorMessage(json.error);
@@ -130,11 +136,11 @@ export default function Account ({setTrigger, storeState, setStoreState, userCod
     }
   };
 
-  return showAccount ? (
-    <div className={styles.popup}>
-      <div className={styles.popup_inner}>
+  return accountPopup ? (
+    <div className={styles.popup} onClick={() => setAccountPopup(false)}>
+      <div className={styles.popup_inner} onClick={(e) => e.stopPropagation()}>
         <div className={styles.close}>
-          <button onClick={() => { setTrigger(false); }}>X</button>
+          <button onClick={() => setAccountPopup(false)}>X</button>
         </div>
 
         <div className={styles.popupfooter}></div>
