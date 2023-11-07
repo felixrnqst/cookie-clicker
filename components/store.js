@@ -15,7 +15,9 @@ export const upgrades = [
   {name: 'Bakery', description: 'An artisanal bakery that produces fresh cookies', price: 200,  max: -1, cps: 5, imagePath: '/bakery.png'},
   {name: 'Super Multiplier', description: 'A multiplier on steroids', price: 250, max: -1, cps: 0, mult: 1.7, imagePath: '/multiplier.png'},
   {name: 'Farm', description: 'Thanks to GMO, cookies can now be grown from plants!', price: 500, cps: 5, imagePath: '/unknown.png'},
-  {name: 'Factory', description: 'The era of industrialisation brings mass-produced cookies!', price: 1000, cps: 10, imagePath: '/factory.png'}
+  {name: 'Factory', description: 'The era of industrialisation brings mass-produced cookies!', price: 1000, cps: 10, imagePath: '/factory.png'},
+  {name: 'Super Factory', description: 'A new production line increases cps', price: 10000, cps: 30, imagePath: '/super-factory.png'},
+  {name: 'A.I. Cookies', description: 'Chips embedded in cookies allow them to multiply!', price: 100000, cps: 100, imagePath: '/ai-cookie.png'}
 ]
 
 export default function Store(props) {
@@ -34,14 +36,14 @@ export default function Store(props) {
   function loop(){//This handles the upgrades
     timer.current += 1;
     for(var u of upgrades){
-      if(props.storeState[u.name] > 0 && u.cps > 0){
+      if((typeof props.storeState[u.name] != 'undefined' ? props.storeState[u.name] : 0) > 0 && u.cps > 0){
         if(u.cps < 1){
           if(timer.current % (1000 / (freq * u.cps)) < 1){
-            props.setCookies((c) => c + props.storeState[u.name])
+            props.setCookies((c) => c + (typeof props.storeState[u.name] != 'undefined' ? props.storeState[u.name] : 0))
           }
         }else{
           if(timer.current % (1000 / (freq)) < 1){
-            props.setCookies((c) => c + props.storeState[u.name] * u.cps)
+            props.setCookies((c) => c + (typeof props.storeState[u.name] != 'undefined' ? props.storeState[u.name] : 0) * u.cps)
           }
         }
 
@@ -66,14 +68,18 @@ function Upgrade(props){
 
   function increment(i){
     var u = upgrades.filter(k => k.name == i)[0]
-    if(props.cookies < Math.floor(u.price * (1 + 0.1 * props.storeState[u.name]))){
+    if(props.cookies < Math.floor(u.price * (1 + 0.1 * (typeof props.storeState[u.name] != 'undefined' ? props.storeState[u.name] : 0)))){
       return;
     }
     playStoreSound();
-    window.cookies = props.cookies - Math.floor(u.price * (1 + 0.1 * props.storeState[u.name]))
-    props.setCookies(props.cookies - Math.floor(u.price * (1 + 0.1 * props.storeState[u.name])))
+    window.cookies = props.cookies - Math.floor(u.price * (1 + 0.1 * (typeof props.storeState[u.name] != 'undefined' ? props.storeState[u.name] : 0)))
+    props.setCookies(props.cookies - Math.floor(u.price * (1 + 0.1 * (typeof props.storeState[u.name] != 'undefined' ? props.storeState[u.name] : 0))))
     props.setStoreState(s => {
-      s[i] += 1;
+      if(typeof s[i] != 'undefined'){
+        s[i] += 1;
+      }else{
+        s[i] = 1;
+      }
       return s
     })
   }
@@ -83,17 +89,17 @@ function Upgrade(props){
       return;
     }
     playStoreSound();
-    window.cookies = props.cookies + Math.floor(u.price * (1 + 0.1 * (props.storeState[u.name] - 1)))
-    props.setCookies(props.cookies + Math.floor(u.price * (1 + 0.1 * (props.storeState[u.name] - 1))))
+    window.cookies = props.cookies + Math.floor(u.price * (1 + 0.1 * ((typeof props.storeState[u.name] != 'undefined' ? props.storeState[u.name] : 0) - 1)))
+    props.setCookies(props.cookies + Math.floor(u.price * (1 + 0.1 * ((typeof props.storeState[u.name] != 'undefined' ? props.storeState[u.name] : 0) - 1))))
     props.setStoreState(s => {
       s[i] -= 1;
       return s
     })
   }
-  if(props.cookies < props.item.price * 0.9 && props.storeState[props.item.name] <= 0 && props.item.name != 'Autoclick'){
+  if(props.cookies < props.item.price * 0.9 && (typeof props.storeState[props.item.name] != 'undefined' ? props.storeState[props.item.name] : 0) <= 0 && props.item.name != 'Autoclick'){
     return ""
   }
-  if(props.cookies >= props.item.price * 0.9 && props.cookies < props.item.price && props.storeState[props.item.name] <= 0 && props.item.name != 'Autoclick'){
+  if(props.cookies >= props.item.price * 0.9 && props.cookies < props.item.price && (typeof props.storeState[props.item.name] != 'undefined' ? props.storeState[props.item.name] : 0) <= 0 && props.item.name != 'Autoclick'){
     return (
       <div className={styles.storeItem} key={props.item.name}>
         <h4>?? 🍪</h4>
@@ -101,7 +107,7 @@ function Upgrade(props){
           <p></p>
           <div className={styles.counter}>
             <span className={styles.change} >-</span>
-            <span>{props.storeState[props.item.name]}</span>
+            <span>{(typeof props.storeState[props.item.name] != 'undefined' ? props.storeState[props.item.name] : 0)}</span>
             <span className={styles.change}>+</span>
           </div>
         </div>
@@ -110,17 +116,17 @@ function Upgrade(props){
   }
   return (
     <div className={styles.storeItem}>
-      <h4>{props.item.name} 🍪{Math.floor(props.item.price * (1 + 0.1 * props.storeState[props.item.name]))}</h4>
+      <h4>{props.item.name} 🍪{Math.floor(props.item.price * (1 + 0.1 * (typeof (typeof props.storeState[props.item.name] != 'undefined' ? props.storeState[props.item.name] : 0) != 'undefined' ? (typeof props.storeState[props.item.name] != 'undefined' ? props.storeState[props.item.name] : 0) : 0)))}</h4>
       <div className={styles.storeItemRow}>
         <p>{props.item.description}</p>
         <div className={styles.counter}>
-          <span className={styles.change + (props.storeState[props.item.name] > 0 ? ' ' + styles.active : '')} onClick={() => decrement(props.item.name)}>-</span>
-          <span>{props.storeState[props.item.name]}</span>
-          <span className={styles.change + (props.cookies >= Math.floor(props.item.price * (1 + 0.1 * props.storeState[props.item.name])) ? ' ' + styles.active : '')} onClick={() => increment(props.item.name)}>+</span>
+          <span className={styles.change + ((typeof props.storeState[props.item.name] != 'undefined' ? props.storeState[props.item.name] : 0) > 0 ? ' ' + styles.active : '')} onClick={() => decrement(props.item.name)}>-</span>
+          <span>{typeof (typeof props.storeState[props.item.name] != 'undefined' ? props.storeState[props.item.name] : 0) != 'undefined' ? (typeof props.storeState[props.item.name] != 'undefined' ? props.storeState[props.item.name] : 0) : 0}</span>
+          <span className={styles.change + (props.cookies >= Math.floor(props.item.price * (1 + 0.1 * (typeof props.storeState[props.item.name] != 'undefined' ? props.storeState[props.item.name] : 0))) ? ' ' + styles.active : '')} onClick={() => increment(props.item.name)}>+</span>
         </div>
       </div>
-      <div className={styles.upgradesImages + (props.storeState[props.item.name] > 0 ? " " + styles.visible : "" )}>
-        {Array.from({ length: props.storeState[props.item.name] }, (_, i) => (
+      <div className={styles.upgradesImages + ((typeof props.storeState[props.item.name] != 'undefined' ? props.storeState[props.item.name] : 0) > 0 ? " " + styles.visible : "" )}>
+        {Array.from({ length: (typeof props.storeState[props.item.name] != 'undefined' ? props.storeState[props.item.name] : 0) }, (_, i) => (
           <img key={i} className={styles.storeImage} src={props.item.imagePath} />
         ))}
       </div>
