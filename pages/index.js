@@ -34,6 +34,7 @@ export default function Home({randomCode}) {
   const [cookiesPerClick, setCookiesPerClick] = useState(1);
   const [cps, setCps] = useState(0);
 
+  const [GoldenCookiecountdown, setGoldenCookiecountdown] = useState(0);
   const [CPSTemporaryMultiplier, setCPSTemporaryMultiplier] = useState(1);
 
   const updateInterval = useRef();
@@ -168,8 +169,8 @@ export default function Home({randomCode}) {
           <Header userCode={userCode} showPopup={() => typeof userCode == '' ? setButtonPopup(true) : setAccountPopup(true)}/>
           <Counter cookies={cookies} storeCps={cps} manualCps={manualCps} cookiesPerClick={cookiesPerClick} CPSTemporaryMultiplier={CPSTemporaryMultiplier}/>
           <Cookie increment={increment} cookiesPerClick={cookiesPerClick} CPSTemporaryMultiplier={CPSTemporaryMultiplier}/>
-          <RandomEvent CPSTemporaryMultiplier={CPSTemporaryMultiplier} setCPSTemporaryMultiplier={setCPSTemporaryMultiplier}/>
-          <Popup cookies={cookies} setCookies={setCookiesOverride} trigger={buttonPopup} setTrigger={setButtonPopup} accountPopup={accountPopup} setAccountPopup={setAccountPopup} userCode={userCode} setUserCode={setUserCode} storeState={storeState} setStoreState={setStoreState} randomCode={randomCode}/>
+          <RandomEvent CPSTemporaryMultiplier={CPSTemporaryMultiplier} setCPSTemporaryMultiplier={setCPSTemporaryMultiplier} GoldenCookiecountdown={GoldenCookiecountdown} setGoldenCookiecountdown={setGoldenCookiecountdown}/>
+          <Popup cookies={cookies} setCookies={setCookiesOverride} trigger={buttonPopup} setTrigger={setButtonPopup} accountPopup={accountPopup} setAccountPopup={setAccountPopup} userCode={userCode} setUserCode={setUserCode} storeState={storeState} setStoreState={setStoreState} randomCode={randomCode} setCPSTemporaryMultiplier={setCPSTemporaryMultiplier} setGoldenCookiecountdown={setGoldenCookiecountdown}/>
         </CookieBackground>
         <Store cookies={cookies} setCookies={setCookiesOverride} storeState={storeState} setStoreState={setStoreState}/>
 

@@ -23,11 +23,14 @@ export default function Popup(props) {
   }, [])
 
   function localClick(){
+    console.log('Local')
     props.setTrigger(false);
+    props.setAccountPopup(false);
     localStorage.setItem('mode', 'local')
   }
 
   function saveClick(){
+    console.log('Online')
     props.setTrigger(false);
     props.setAccountPopup(true);
     localStorage.setItem('mode', 'online')
@@ -46,6 +49,6 @@ export default function Popup(props) {
       </div>
     </div>
   ) : (
-    <Account accountPopup={props.accountPopup} setAccountPopup={props.setAccountPopup} cookies={props.cookies} setCookies={props.setCookies} userCode={props.userCode} setUserCode={props.setUserCode} storeState={props.storeState} setStoreState={props.setStoreState} randomCode={props.randomCode}/>
+    <Account accountPopup={props.accountPopup} setAccountPopup={props.setAccountPopup} cookies={props.cookies} setCookies={props.setCookies} userCode={props.userCode} setUserCode={props.setUserCode} storeState={props.storeState} setStoreState={props.setStoreState} randomCode={props.randomCode} setCPSTemporaryMultiplier={props.setCPSTemporaryMultiplier} setGoldenCookiecountdown={props.setGoldenCookiecountdown}/>
   );
 }

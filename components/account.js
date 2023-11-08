@@ -5,7 +5,7 @@ This creates the popup for the user either to create new account or enter their 
 import { useState, useEffect, useRef } from "react";
 import styles from './popup.module.scss'; //Uses the same styles as for the pop-up
 
-export default function Account ({accountPopup, setAccountPopup, storeState, setStoreState, userCode, setUserCode, cookies, setCookies, randomCode}) {
+export default function Account ({accountPopup, setAccountPopup, storeState, setStoreState, userCode, setUserCode, cookies, setCookies, randomCode, setCPSTemporaryMultiplier, setGoldenCookiecountdown}) {
   // const [accountPopup, setAccountPopup] = useState(true);
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
@@ -33,6 +33,26 @@ export default function Account ({accountPopup, setAccountPopup, storeState, set
       codeRef.current.value = userCode
     }
   }, [accountPopup])
+
+  function localClick(){
+    console.log('Switch to local')
+    setAccountPopup(false);
+    localStorage.setItem('mode', 'local')
+    // Stop saving to DB
+    clearInterval(saveInterval.current);
+    localStorage.removeItem("code")
+    
+
+    // Put all stats to 0
+    setCookies(0)
+    setCPSTemporaryMultiplier(1)
+    setGoldenCookiecountdown(0)
+    setStoreState(prevState => Object.keys(prevState).reduce((acc, key) => {
+      acc[key] = 0;
+      return acc;}, 
+      {}));
+    
+  }
 
   function handlePageClose(storeState, code) {
     // TODO : ADD WORKING LISTENER ! This one looks like very unstable and depends on user's browser
@@ -70,6 +90,7 @@ export default function Account ({accountPopup, setAccountPopup, storeState, set
     }
 
   }
+
 
   async function startNewSavedGame() {
     console.log(`Adding user_code ${randomCode} to DB...`);
@@ -146,6 +167,9 @@ export default function Account ({accountPopup, setAccountPopup, storeState, set
         <div className={styles.popupfooter}></div>
 
         <div className={styles.float_container}>
+          <div className={styles.popupfooter}>
+            <button onClick={localClick}>Switch to local</button>
+          </div>
           <div className={styles.float_child}>
             <div className={styles.title}>
               <h2>Start a new game :</h2>

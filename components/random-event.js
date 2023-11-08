@@ -6,13 +6,12 @@ import React, { useState, useEffect } from "react";
 import styles from './random-event.module.scss';
 import { motion } from 'framer-motion';
 
-export default function RandomEvent({CPSTemporaryMultiplier, setCPSTemporaryMultiplier}) {
+export default function RandomEvent({CPSTemporaryMultiplier, setCPSTemporaryMultiplier, GoldenCookiecountdown, setGoldenCookiecountdown}) {
     const [showImage, setShowImage] = useState(false);
     const [randomStartX, setRandomStartX] = useState(0);
     const [randomStartY, setRandomStartY] = useState(0);
     const [randomEndX, setRandomEndX] = useState(0);
     const [randomEndY, setRandomEndY] = useState(0);
-    const [GoldenCookiecountdown, setGoldenCookiecountdown] = useState(0);
 
     useEffect(() => {
         const randomTimeout = () => {
