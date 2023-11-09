@@ -80,6 +80,7 @@ function Upgrade(props){
       }else{
         s[i] = 1;
       }
+      localStorage.setItem('upgrades', JSON.stringify(s))
       return s
     })
   }

@@ -6,18 +6,19 @@ import React, { useState, useEffect } from "react";
 import styles from './popup.module.scss';
 import Account from './account'
 
-
-// The close button is temporary for development
 export default function Popup(props) {
-  // const [showAccountPopup, setShowAccountPopup] = useState(false);
 
   useEffect(() => {
     if(localStorage.getItem('mode') !== null){
+      console.log("Hiding popup")
       props.setTrigger(false);
       if(localStorage.getItem('mode') == 'online' && localStorage.getItem('code') === null){
+        console.log("Showing account popup")
         props.setAccountPopup(true);
       }
     }else{
+      console.log("Showing popup")
+
       props.setTrigger(true)
     }
   }, [])
@@ -49,6 +50,6 @@ export default function Popup(props) {
       </div>
     </div>
   ) : (
-    <Account accountPopup={props.accountPopup} setAccountPopup={props.setAccountPopup} cookies={props.cookies} setCookies={props.setCookies} userCode={props.userCode} setUserCode={props.setUserCode} storeState={props.storeState} setStoreState={props.setStoreState} randomCode={props.randomCode} setCPSTemporaryMultiplier={props.setCPSTemporaryMultiplier} setGoldenCookiecountdown={props.setGoldenCookiecountdown}/>
+    <Account accountPopup={props.accountPopup} setAccountPopup={props.setAccountPopup} cookies={props.cookies} setCookies={props.setCookies} userCode={props.userCode} setUserCode={props.setUserCode} storeState={props.storeState} setStoreState={props.setStoreState} randomCode={props.randomCode} reset={props.reset}/>
   );
 }

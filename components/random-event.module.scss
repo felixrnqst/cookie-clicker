@@ -1,20 +1,26 @@
 .goldenCookie {
-    position: absolute;
-    width: 10vw; //3
-    height: 10vw;
+
+    width: 6rem;
+    height: 6rem;
     background-size: 100%;
     cursor: pointer;
+    z-index: 1000;
+}
+
+.goldenCookieContainer {
+  top: 0;
+  left: 0;
+  position: absolute;
 }
 
 .goldenCookieCountdownPanel {
-    font-size: 1.5rem; // or any other value
-    width: -50%;
-    height: 100%;
-    right: 50%;
+    font-size: 1.5rem;
+    // width: -50%;
+    // height: 100%;
+    // right: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
-
 
 }
 

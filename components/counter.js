@@ -4,6 +4,7 @@ This formats the cookie value
 */
 import Head from 'next/head';
 import { useState, useEffect } from 'react'
+import styles from './random-event.module.scss'
 
 export function prettyDisplay(c) {
   const bigNumbers = [
@@ -138,7 +139,7 @@ export function displayCps(cps){
 }
 
 
-export default function Counter({cookies, storeCps, manualCps, CPSTemporaryMultiplier}){
+export default function Counter({cookies, storeCps, manualCps, CPSTemporaryMultiplier, goldenCookiecountdown}){
   const [cpsDisplay, setCpsDisplay] = useState(0);
   useEffect(() => {
     setCpsDisplay(displayCps((manualCps + storeCps) * CPSTemporaryMultiplier))
@@ -151,6 +152,13 @@ export default function Counter({cookies, storeCps, manualCps, CPSTemporaryMulti
       </Head>
       <h3 style={{fontVariantNumeric: 'tabular-nums', fontSize: '1.6rem'}}>{prettyDisplay(cookies)} {cookies != 1 ? 'cookies' : 'cookie'}</h3>
       <h4 style={{textAlign: 'center'}}>{cpsDisplay} CPS</h4>
+      {goldenCookiecountdown > 0 && (
+          <div className={styles.goldenCookieCountdownPanel}>
+              <img className={styles.goldenCookieIcon} src="/goldencookie.png" />
+              {goldenCookiecountdown +" seconds"}
+              {CPSTemporaryMultiplier > 1 ? " (x" + CPSTemporaryMultiplier + ")" : ""}
+          </div>
+      )}
     </>
   )
 }

@@ -2,60 +2,130 @@
 random-event.js - Created by Guillaume
 This gather all the random events that can happen to the player
 */
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import styles from './random-event.module.scss';
 import { motion } from 'framer-motion';
 
-export default function RandomEvent({CPSTemporaryMultiplier, setCPSTemporaryMultiplier, GoldenCookiecountdown, setGoldenCookiecountdown}) {
+export default function RandomEvent({CPSTemporaryMultiplier, setCPSTemporaryMultiplier, goldenCookiecountdown, setGoldenCookiecountdown}) {
     const [showImage, setShowImage] = useState(false);
-    const [randomStartX, setRandomStartX] = useState(0);
-    const [randomStartY, setRandomStartY] = useState(0);
-    const [randomEndX, setRandomEndX] = useState(0);
-    const [randomEndY, setRandomEndY] = useState(0);
+    const [coordsState, setCoordsState] = useState([0,0])
+
+    const intervalRef = useRef()
+    const imageRef = useRef()
+    const goldenCookiesShown = useRef(0)
+    const coords = useRef([0,0])
+    const update = useRef([true, true]) //To know which way to update
+    const showImageRef = useRef(false)
 
     useEffect(() => {
+      if(intervalRef.current == null){
+        intervalRef.current = setInterval(() => {
+          if(!showImageRef.current){
+            return;
+          }
+          // const containerRect = props.containerRef.current.getBoundingClientRect();
+          const phraseRect = imageRef.current.getBoundingClientRect();
+
+          if(update.current[0]){
+            if(coords.current[0] + phraseRect.width < window.innerWidth){
+              coords.current[0]++;
+            }else{
+              coords.current[0]--;
+              update.current[0] = false;
+            }
+          }else{
+            if(coords.current[0] > 0){
+              coords.current[0]--;
+            }else{
+              coords.current[0]++;
+              update.current[0] = true;
+            }
+          }
+
+          if(update.current[1]){
+            if(coords.current[1] + phraseRect.height < window.innerHeight){
+              coords.current[1]++;
+            }else{
+              coords.current[1]--;
+              update.current[1] = false;
+            }
+          }else{
+            if(coords.current[1] > 0){
+              coords.current[1]--;
+            }else{
+              coords.current[1]++;
+              update.current[1] = true;
+            }
+          }
+          setCoordsState([coords.current[0], coords.current[1]]);
+        }, 1000/40)
+      }
+      return () => {
+        clearInterval(intervalRef.current)
+        intervalRef.current = null
+      }
+    }, [])
+
+    useEffect(() => {
+        window.goldenCookie = () => {
+          handleGoldenCookieClick();
+        }
+        window.showCookie = () => {
+          const randomAppearance = Math.floor(Math.random() * 15) + 5; //Between 5 and 15s
+          setShowImage(true);
+          showImageRef.current = true;
+          setCoords([Math.floor(Math.random() * window.innerWidth), Math.floor(Math.random() * window.innerHeight)])
+          console.log("Showing image")
+          setTimeout(() => {
+              console.log("Hiding image")
+              setShowImage(false);
+              showImageRef.current = false;
+          }, randomAppearance * 1000);
+        }
         const randomTimeout = () => {
             // TODO : Raise time between each golden cookie
-            const randomTime = Math.floor(Math.random() * 5000) + 5000; 
+            // const randomTime = Math.floor(Math.random() * 5000) + 5000; //Between 5 and 10s
+            const randomTime = Math.floor(Math.random() * 10 * 60) + 60 + 5 * 60 * goldenCookiesShown.current; //Between 1 and 10mins, for every golden cookie there's 5 mins more to wait
+            const randomAppearance = Math.floor(Math.random() * 15) + 5; //Between 5 and 15s
             setTimeout(() => {
+              if(goldenCookiecountdown <= 0){
                 setShowImage(true);
-                console.log("Image shown");
-                setRandomStartX(Math.floor(Math.random() * 60) + 1);
-                setRandomStartY(Math.floor(Math.random() * 60) + 1);
-                setRandomEndX(Math.floor(Math.random() * 60) + 1);
-                setRandomEndY(Math.floor(Math.random() * 60) + 1);
+                showImageRef.current = true;
+                setCoords([Math.floor(Math.random() * window.innerWidth), Math.floor(Math.random() * window.innerHeight)])
                 setTimeout(() => {
+                    showImageRef.current = false;
                     setShowImage(false);
-                    console.log("Image hidden");
                     randomTimeout();
-                }, 5000);
-            }, randomTime);
+                }, randomAppearance * 1000);
+              }
+            }, randomTime * 1000);
         };
         randomTimeout();
     }, []);
 
     useEffect(() => {
         const interval = setInterval(() => {
-            setGoldenCookiecountdown(GoldenCookiecountdown - 1);
+            setGoldenCookiecountdown(goldenCookiecountdown - 1);
         }, 1000);
         return () => clearInterval(interval);
-    }, [GoldenCookiecountdown]);
+    }, [goldenCookiecountdown]);
 
     useEffect(() => {
         console.log("CPSTemporaryMultiplier : " + CPSTemporaryMultiplier);
         if (CPSTemporaryMultiplier != 1) {
             const timeout = setTimeout(() => {
                 setCPSTemporaryMultiplier(prevMultiplier => prevMultiplier / 7);
-            }, GoldenCookiecountdown * 1000 + 2000);
-            console.log("GoldenCookiecountdown : " + GoldenCookiecountdown);
+            }, goldenCookiecountdown * 1000 + 2000);
+            console.log("goldenCookiecountdown : " + goldenCookiecountdown);
             return () => clearTimeout(timeout);
         }
     }, [CPSTemporaryMultiplier]);
 
     function handleGoldenCookieClick() {
-        console.log("Golden cookie clicked !");
-        const randomTime = Math.floor(Math.random() * 30) + 70
-
+        console.log("Golden cookie!");
+        const randomTime = Math.floor(Math.random() * 60) + 40 //Between 40-100s
+        goldenCookiesShown.current += 1;
+        showImageRef.current = false;
         setShowImage(false);
         console.log(CPSTemporaryMultiplier)
         setCPSTemporaryMultiplier(prevMultiplier => prevMultiplier * 7);
@@ -64,24 +134,26 @@ export default function RandomEvent({CPSTemporaryMultiplier, setCPSTemporaryMult
     };
 
     return (
-        <div>
-            {showImage && (
-                <motion.img
-                    className={styles.goldenCookie}
-                    src="/goldencookie.png"
-                    initial={{ x: `${randomStartX}vw`, y: `${randomStartY}vw`}}
-                    animate={{ x: `${randomEndX}vw`, y: `${randomEndY}vw`}}
-                    transition={{ duration: 10, repeat: Infinity }}
-                    onClick={handleGoldenCookieClick}
-                />
-            )}
-            {GoldenCookiecountdown > 0 && (
-                <div className={styles.goldenCookieCountdownPanel}>
-                    {GoldenCookiecountdown > 1 ? <img className={styles.goldenCookieIcon} src="/goldencookie.png" /> : ""}
-                    {GoldenCookiecountdown > 1 ? GoldenCookiecountdown +" seconds" : ""}
-                    {CPSTemporaryMultiplier > 1 ? " (x" + CPSTemporaryMultiplier + ")" : ""}
-                </div>
-            )}
-        </div>
+        <>
+          {showImage && (
+          <div className={styles.goldenCookieContainer} style={{transform: 'translateX(' + coordsState[0] + 'px) translateY(' + coordsState[1] + 'px)'}}>
+            <motion.img
+              ref={imageRef}
+              src="/goldencookie.png"
+              className={styles.goldenCookie}
+              animate={{
+                scale: [1, 2, 2, 1, 1]
+              }}
+              transition={{
+                duration: 2,
+                ease: "easeInOut",
+                times: [0, 0.2, 0.5, 0.8, 1],
+                repeat: Infinity,
+                repeatDelay: 1
+              }}
+              onClick={handleGoldenCookieClick}
+            />
+          </div>)}
+        </>
     );
 }

@@ -34,31 +34,52 @@ export default function Home({randomCode}) {
   const [cookiesPerClick, setCookiesPerClick] = useState(1);
   const [cps, setCps] = useState(0);
 
-  const [GoldenCookiecountdown, setGoldenCookiecountdown] = useState(0);
+  const [goldenCookiecountdown, setGoldenCookiecountdown] = useState(0);
   const [CPSTemporaryMultiplier, setCPSTemporaryMultiplier] = useState(1);
 
   const updateInterval = useRef();
   const clickInterval = useRef();
   const updateOverride = useRef(false);
 
+  function reset(){
+    // Put all stats to 0
+    setCookies(0)
+    setCPSTemporaryMultiplier(1)
+    setGoldenCookiecountdown(0)
+    setStoreState(prevState => Object.keys(prevState).reduce((acc, key) => {
+    acc[key] = 0;
+    return acc;},
+    {}));
+  }
 
-  // TODO : ADD A LOT MORE FUNNY PHRASES
 
-  // const [phrases, setPhrases] = useState([
   const phrases = [
     (props) => `Seulement ${props.prettyCookies} cookies ? Pas ouf...`,
     (props) => `${props.cps} cookies per second? ${props.cps > 10 ? 'Great!' : 'You can do better...'}`,
+    'In the cookie of life, friends are the chocolate chips.',
+    'Make the world a better place one cookie at a time.',
+    'Cookies are made of butter and love.',
+    'I never met a cookie I didn’t like.',
     'Le cookie est beau n\'est-ce pas ?',
+    'Cookies. Here today, gone tomorrow.',
+    'If you can’t change the world with cookies, how can you change the world?',
+    'Cookie is the answer. Who cares what the question is?',
+    'Not without cookies, I won’t!',
+    'You can’t eat just one cookie. It would get lonely.',
+    'You’re the chocolate chip to my cookie.',
+    'When in doubt, bake cookies.',
+    'Get onboard the cookie train.',
+    'Cookies are like duct tape. They can fix everything.',
+    'It’s cookie o’clock.',
+    'Come to the dark side. We have cookies.',
+    'The fortune you seek is in another cookie.',
     'C\'est pour Nsigma ou quoi ?',
     'T\'as vu on a ecrit le jeu en anglais',
     'The cookie is a lie.',
     <>Recette de cookie : <br/>1 oeuf,<br/> 100g de beurre,<br/> 100g de sucre,<br/> 200g de farine,<br/> 1 pincee de sel,<br/> 1 sachet de levure,<br/> 200g de chocolat<br/></>,
   ]
 
-  // ]);
-
   // DONE: Add break lines in recette de cookies (\n doesn't work for some reason ?) - in html one has to use <br>
-  // TODO Add more dynamic phrases
   // IDEA : Get random inspirational cookie quote from API
 
   useEffect(() => {// useEffect is run only once when the component is mounted
@@ -75,8 +96,11 @@ export default function Home({randomCode}) {
   console.log('\\____/  /_/  /_/  \\___/ /_/|_| \\___//_/     ')
   console.log('Built by Guillaume, Felix, Étienne, Matthieu')
 
-    if(localStorage.getItem('mode') === 'local' && localStorage.getItem('cookies') !== 'null'){
-      setCookies(parseInt(localStorage.getItem('cookies')))
+    if(localStorage.getItem('mode') === 'local'){
+      if(localStorage.getItem('cookies') !== null)
+        setCookies(parseInt(localStorage.getItem('cookies')))
+      if(localStorage.getItem('store') !== null)
+        setStoreState(JSON.parse(localStorage.getItem('store')))
     }
 
     window.cookies = cookies; //We want to use window.cookies to be able to "hack" the game in the console
@@ -176,11 +200,11 @@ export default function Home({randomCode}) {
         <CookieBackground>
           <RandomPhrase phrases={phrases} cps={displayCps(cps + manualCps)} prettyCookies={prettyDisplay(cookies)}/>
           <Header userCode={userCode} showPopup={userIconClick}/>
-          <Counter cookies={cookies} storeCps={cps} manualCps={manualCps} cookiesPerClick={cookiesPerClick} CPSTemporaryMultiplier={CPSTemporaryMultiplier}/>
+          <Counter cookies={cookies} storeCps={cps} manualCps={manualCps} cookiesPerClick={cookiesPerClick} CPSTemporaryMultiplier={CPSTemporaryMultiplier} goldenCookiecountdown={goldenCookiecountdown}/>
           <Cookie increment={increment} cookiesPerClick={cookiesPerClick} CPSTemporaryMultiplier={CPSTemporaryMultiplier}/>
-          <RandomEvent CPSTemporaryMultiplier={CPSTemporaryMultiplier} setCPSTemporaryMultiplier={setCPSTemporaryMultiplier} GoldenCookiecountdown={GoldenCookiecountdown} setGoldenCookiecountdown={setGoldenCookiecountdown}/>
-          <Popup cookies={cookies} setCookies={setCookiesOverride} trigger={buttonPopup} setTrigger={setButtonPopup} accountPopup={accountPopup} setAccountPopup={setAccountPopup} userCode={userCode} setUserCode={setUserCode} storeState={storeState} setStoreState={setStoreState} randomCode={randomCode} setCPSTemporaryMultiplier={setCPSTemporaryMultiplier} setGoldenCookiecountdown={setGoldenCookiecountdown}/>
+          <Popup cookies={cookies} setCookies={setCookiesOverride} trigger={buttonPopup} setTrigger={setButtonPopup} accountPopup={accountPopup} setAccountPopup={setAccountPopup} userCode={userCode} setUserCode={setUserCode} storeState={storeState} setStoreState={setStoreState} randomCode={randomCode} reset={reset}/>
         </CookieBackground>
+        <RandomEvent CPSTemporaryMultiplier={CPSTemporaryMultiplier} setCPSTemporaryMultiplier={setCPSTemporaryMultiplier} goldenCookiecountdown={goldenCookiecountdown} setGoldenCookiecountdown={setGoldenCookiecountdown}/>
         <Store cookies={cookies} setCookies={setCookiesOverride} storeState={storeState} setStoreState={setStoreState}/>
 
       </main>

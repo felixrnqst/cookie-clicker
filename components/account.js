@@ -5,7 +5,7 @@ This creates the popup for the user either to create new account or enter their 
 import { useState, useEffect, useRef } from "react";
 import styles from './popup.module.scss'; //Uses the same styles as for the pop-up
 
-export default function Account ({accountPopup, setAccountPopup, storeState, setStoreState, userCode, setUserCode, cookies, setCookies, randomCode, setCPSTemporaryMultiplier, setGoldenCookiecountdown}) {
+export default function Account ({accountPopup, setAccountPopup, storeState, setStoreState, userCode, setUserCode, cookies, setCookies, randomCode, reset}) {
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
@@ -20,7 +20,8 @@ export default function Account ({accountPopup, setAccountPopup, storeState, set
       setAccountPopup(false);
       login(localStorage.getItem('code'));
     }else{
-      setAccountPopup(true);
+      if(localStorage.getItem('mode') !== 'local')
+        setAccountPopup(true);
     }
     return () => {//Cleanup function
       clearInterval(saveInterval.current);
@@ -37,20 +38,15 @@ export default function Account ({accountPopup, setAccountPopup, storeState, set
     console.log('Switch to local')
     setAccountPopup(false);
     localStorage.setItem('mode', 'local')
+    localStorage.removeItem('code')
     // Stop saving to DB
     clearInterval(saveInterval.current);
+    setUserCode('')
     localStorage.removeItem("code")
-    
 
-    // Put all stats to 0
-    setCookies(0)
-    setCPSTemporaryMultiplier(1)
-    setGoldenCookiecountdown(0)
-    setStoreState(prevState => Object.keys(prevState).reduce((acc, key) => {
-      acc[key] = 0;
-      return acc;}, 
-      {}));
-    
+
+    reset();
+
   }
 
   function handlePageClose(storeState, code) {
@@ -99,7 +95,7 @@ export default function Account ({accountPopup, setAccountPopup, storeState, set
     console.log('HTTP status: ' + res.status);
     setUserCode(randomCode);
     localStorage.setItem('code', randomCode);
-    setCookies(0);
+    reset();
     saveInterval.current = setInterval(() => savePlayerProgress(randomCode, storeState), save_delay * 1000); // save_delay in seconds
 
     setAccountPopup(false);
