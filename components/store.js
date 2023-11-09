@@ -14,7 +14,7 @@ export const upgrades = [
   {name: 'Multiplier', description: 'Multiplies the amount of cookies a click produces', price: 50, max: -1, cps: 0, mult: 1.3, imagePath: '/multiplier.png'},
   {name: 'Bakery', description: 'An artisanal bakery that produces fresh cookies', price: 200,  max: -1, cps: 5, imagePath: '/bakery.png'},
   {name: 'Super Multiplier', description: 'A multiplier on steroids', price: 250, max: -1, cps: 0, mult: 1.7, imagePath: '/multiplier.png'},
-  {name: 'Farm', description: 'Thanks to GMO, cookies can now be grown from plants!', price: 500, cps: 5, imagePath: '/unknown.png'},
+  {name: 'Farm', description: 'Thanks to GMO, cookies can now be grown from plants!', price: 500, cps: 5, imagePath: '/farm.png'},
   {name: 'Factory', description: 'The era of industrialisation brings mass-produced cookies!', price: 1000, cps: 10, imagePath: '/factory.png'},
   {name: 'Super Factory', description: 'A new production line increases cps', price: 10000, cps: 30, imagePath: '/super-factory.png'},
   {name: 'A.I. Cookies', description: 'Chips embedded in cookies allow them to multiply!', price: 100000, cps: 100, imagePath: '/ai-cookie.png'}

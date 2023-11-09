@@ -21,20 +21,22 @@ It's not just about code; it's about the sheer joy of creation and the thrill of
 
 So, are you ready to embark on this delightful adventure into the world of cookies and clicks? Let the cookie-clicking begin!
 
-## Running the app
+
+## Technical details
+### Running the app
 The app is based on Next.js, which itself uses Node.js. To test the app locally, you need to have [node](https://nodejs.org/en/download/package-manager) and [yarn](https://classic.yarnpkg.com/lang/en/docs/install/#mac-stable) installed.
 Then cd into the directory.
 Run `yarn install dependencies` to install the Node.js packages necessary to run the project.
 Run `yarn run dev` to run in development mode.
 Run `yarn run build` and `yarn start` to run in production mode (The project has to be built first).
 
-## Project organisation
+### Project organisation
 `/pages`: The web pages which are served, for example `/pages/cookie.js` can be visited at `example.com/cookie`.\
 `/pages/api`: This is where APIs are run on every visit.\
 `/components`: This is where components for pages are stored.\
 `/styles`: This is where CSS (for styling pages and components) are stored.\
 
-## Naming conventions
+### Naming conventions
 Each file created must have a comment explaining the author and what the file does, as follows: \
 ```
 /*
@@ -43,6 +45,16 @@ This file explains naming conventions in this project
 */
 ```
 
-## Contributing code
+### Contributing code
 
 Before committing code, you *must* make sure that it runs and builds properly, using `yarn run build`, to avoid submitting buggy code to the repository.
+
+## Playing the Game
+The cookie clicker game can be played online or offline. Playing online allows to upload your game so that you can retrieve it later on another device.
+If you choose to play offline, game state will be saved locally to your device. This means that you will still be able to retrieve the game on the same device.
+
+### Upgrades
+Once you have enough cookies, you may purchase upgrades from the store if you wish. These will help you earn cookies faster and without clicking!
+
+### Golden cookies
+Every now and then, a golden cookie will appear onscreen. You can click it to get extra upgrades for a limited time!
