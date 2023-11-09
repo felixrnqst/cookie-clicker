@@ -30,3 +30,6 @@ Pour le développement et pour permettre le hackage comme dans le vrai jeu, des 
 `window.cookies` contient le nombre de cookies du joueur et est modifiable\
 `window.goldenCookies()` active la session "golden cookies"\
 `window.showCookie()` montre le cookie flottant qui permet l'activation des "golden cookies"
+
+## Déploiement
+Pour déployer notre projet nous avoir choisi d'utiliser Vercel, outil connu facile d'utilisation et gratuit pour les petits projets.
