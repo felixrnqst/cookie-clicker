@@ -79,7 +79,7 @@ function Phrase(props){
           }
         }
         setCoordsState([coords.current[0], coords.current[1]]);
-      }, 1000/60)
+      }, 1000/40)
     }
     return () => {
       clearInterval(intervalRef.current)

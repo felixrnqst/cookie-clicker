@@ -14,7 +14,7 @@ export default function Popup(props) {
   useEffect(() => {
     if(localStorage.getItem('mode') !== null){
       props.setTrigger(false);
-      if(localStorage.getItem('mode') == 'online'){
+      if(localStorage.getItem('mode') == 'online' && localStorage.getItem('code') === null){
         props.setAccountPopup(true);
       }
     }else{

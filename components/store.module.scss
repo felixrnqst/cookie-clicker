@@ -27,19 +27,19 @@
   overflow-y: hidden;
   display: flex;
   height: 4rem;
-  scrollbar-width: thin;
-  scrollbar-color: #782c00 #3d1601;
-  &::-webkit-scrollbar {
-    width: 6px;
-  }
-  &::-webkit-scrollbar-track {
-    background: #3d1601;
-  }
-  &::-webkit-scrollbar-thumb {
-    background-color: #782c00;
-    border-radius: 20px;
-    border: 3px solid #3d1601;
-  }
+  // scrollbar-width: thin;
+  // scrollbar-color: #782c00 #3d1601;
+  // &::-webkit-scrollbar {
+  //   width: 3px;
+  // }
+  // &::-webkit-scrollbar-track {
+  //   background: #3d1601;
+  // }
+  // &::-webkit-scrollbar-thumb {
+  //   background-color: #782c00;
+  //   border-radius: 20px;
+  //   border: 3px solid #3d1601;
+  // }
   .storeImage {
     width: 4rem;
     height: 4rem;
