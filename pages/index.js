@@ -46,10 +46,11 @@ export default function Home({randomCode}) {
     setCookies(0)
     setCPSTemporaryMultiplier(1)
     setGoldenCookiecountdown(0)
-    setStoreState(prevState => Object.keys(prevState).reduce((acc, key) => {
-    acc[key] = 0;
-    return acc;},
-    {}));
+    for (let upgrade_name in storeState) {
+      setStoreState(s => {
+        s[upgrade_name] = 0;
+        return s})
+    }
   }
 
 
