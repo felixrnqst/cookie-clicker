@@ -6,7 +6,6 @@ import { useState, useEffect, useRef } from "react";
 import styles from './popup.module.scss'; //Uses the same styles as for the pop-up
 
 export default function Account ({accountPopup, setAccountPopup, storeState, setStoreState, userCode, setUserCode, cookies, setCookies, randomCode, setCPSTemporaryMultiplier, setGoldenCookiecountdown}) {
-  // const [accountPopup, setAccountPopup] = useState(true);
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
@@ -64,7 +63,6 @@ export default function Account ({accountPopup, setAccountPopup, storeState, set
 
   function retreive_account_data(data) {
     setAccountPopup(false);
-    console.log(data)
     setCookies(data.cookies)
     localStorage.setItem("cookies", data.cookies);
     // Recover all upgrade of user
@@ -132,6 +130,7 @@ export default function Account ({accountPopup, setAccountPopup, storeState, set
         if (isValidCode) {
           // Listener to save user data when they leave the website
           handlePageClose(storeState, code)
+          localStorage.setItem('mode', "online");
           localStorage.setItem('code', code);
           setUserCode(code)
           setSuccess(isValidCode);
@@ -167,9 +166,11 @@ export default function Account ({accountPopup, setAccountPopup, storeState, set
         <div className={styles.popupfooter}></div>
 
         <div className={styles.float_container}>
+          {localStorage.getItem('mode') == 'online' &&
           <div className={styles.popupfooter}>
             <button onClick={localClick}>Switch to local</button>
           </div>
+          }
           <div className={styles.float_child}>
             <div className={styles.title}>
               <h2>Start a new game :</h2>

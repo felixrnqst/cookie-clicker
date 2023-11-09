@@ -156,6 +156,15 @@ export default function Home({randomCode}) {
     return () => clearInterval(clickInterval.current);
   }, [clicks]);
 
+  function HandleUserIconClick() {
+    if(typeof userCode == ''){
+      setButtonPopup(true)
+    }else{
+      setAccountPopup(true)
+    }
+  }
+
+
   return (
     <div className={styles.container}>
       <Head>
@@ -166,7 +175,7 @@ export default function Home({randomCode}) {
       <main className={styles.main}>
         <CookieBackground>
           <RandomPhrase phrases={phrases} cps={displayCps(cps + manualCps)} prettyCookies={prettyDisplay(cookies)}/>
-          <Header userCode={userCode} showPopup={() => typeof userCode == '' ? setButtonPopup(true) : setAccountPopup(true)}/>
+          <Header userCode={userCode} showPopup={HandleUserIconClick}/>
           <Counter cookies={cookies} storeCps={cps} manualCps={manualCps} cookiesPerClick={cookiesPerClick} CPSTemporaryMultiplier={CPSTemporaryMultiplier}/>
           <Cookie increment={increment} cookiesPerClick={cookiesPerClick} CPSTemporaryMultiplier={CPSTemporaryMultiplier}/>
           <RandomEvent CPSTemporaryMultiplier={CPSTemporaryMultiplier} setCPSTemporaryMultiplier={setCPSTemporaryMultiplier} GoldenCookiecountdown={GoldenCookiecountdown} setGoldenCookiecountdown={setGoldenCookiecountdown}/>

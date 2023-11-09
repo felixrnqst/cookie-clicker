@@ -7,12 +7,19 @@
 }
 
 .goldenCookieCountdownPanel {
-    // TODO  : CHANGE IT TO BETTER :)
+    font-size: 1.5rem; // or any other value
     width: -50%;
     height: 100%;
     right: 50%;
-    border-color: crimson;
-    border-style: solid;
-    border-width: 0.5vw;
+    display: flex; 
+    align-items: center; 
+    justify-content: center;
 
+
+}
+
+.goldenCookieIcon {
+    margin-right: 10px;
+    width: 1.5vw; //3
+    height: 1.5vw;
 }

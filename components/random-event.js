@@ -77,6 +77,7 @@ export default function RandomEvent({CPSTemporaryMultiplier, setCPSTemporaryMult
             )}
             {GoldenCookiecountdown > 0 && (
                 <div className={styles.goldenCookieCountdownPanel}>
+                    {GoldenCookiecountdown > 1 ? <img className={styles.goldenCookieIcon} src="/goldencookie.png" /> : ""}
                     {GoldenCookiecountdown > 1 ? GoldenCookiecountdown +" seconds" : ""}
                     {CPSTemporaryMultiplier > 1 ? " (x" + CPSTemporaryMultiplier + ")" : ""}
                 </div>
