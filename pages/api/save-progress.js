@@ -15,10 +15,6 @@ async function run(req, res){
     return res.status(400).json({error: 'Correct parameters not supplied'})
   }
 
-  console.log(body.cookies)
-  console.log(body.storeState)
-  console.log(body.code)
-
   const { error } = await supabase
     .from('cookie')
     .update({ "cookies" : body.cookies,

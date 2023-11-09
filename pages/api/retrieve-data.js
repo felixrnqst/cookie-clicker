@@ -20,9 +20,6 @@ async function run(req, res){
     .eq("code", body.code)
     .single();
 
-  console.log(data)
-  console.log(error)
-
   if (error) {
     console.log(error);
     if (error.message == "TypeError: NetworkError when attempting to fetch resource.") {
