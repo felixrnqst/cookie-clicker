@@ -29,4 +29,4 @@ L'algorithme tourne en Javascript sur le navigateur, et s'occupe d'incrémenter 
 Pour le développement et pour permettre le hackage comme dans le vrai jeu, des fonctions sont appellables depuis la console:\
 `window.cookies` contient le nombre de cookies du joueur et est modifiable\
 `window.goldenCookies()` active la session "golden cookies"\
-`window.showCookie()` montre le cookie flottant qui permet l'activation des "golden cookies"\
+`window.showCookie()` montre le cookie flottant qui permet l'activation des "golden cookies"
