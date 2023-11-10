@@ -25,6 +25,11 @@ Pour permettre la persistance de partie à travers de multiples appareils, un ba
 ## Algorithme
 L'algorithme tourne en Javascript sur le navigateur, et s'occupe d'incrémenter les cookies, montrer les upgrades etc.
 
+## Le développement
+Au cours du développement, nous avons rencontré plusieurs difficultés qu'on a pu contourner.
+La première était au niveau de la gestion du passage entre partie en ligne/locale, il fallait trouver un moyen visuel pour permettre à l'utilisateur de basculer entre.
+La deuxième difficulté était à la fin du développement au niveau du déploiement, il semblerait qu'il y a un bug au niveau de `framer-motion` et du mode production sur Vercel. 
+
 ## Hackage
 Pour le développement et pour permettre le hackage comme dans le vrai jeu, des fonctions sont appellables depuis la console:\
 `window.cookies` contient le nombre de cookies du joueur et est modifiable\

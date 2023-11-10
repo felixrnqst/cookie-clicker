@@ -9,7 +9,7 @@ import { useState, useEffect, useRef } from 'react'
 import Image from 'next/image'
 import cookie from '../public/cookie.png'
 
-import { motion, useAnimate } from 'framer-motion'
+const { motion, useAnimate } = require('framer-motion')
 import useSound from 'use-sound';
 import { prettyDisplay } from './counter'
 

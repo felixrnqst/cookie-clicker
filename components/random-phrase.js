@@ -4,7 +4,7 @@ Add random floating phrase around the cookie
 */
 
 import { useState, useEffect, useRef } from 'react';
-import { motion } from 'framer-motion';
+const { motion } = require('framer-motion');
 import styles from "./random-phrase.module.scss"
 import { prettyDisplay } from './counter';
 
@@ -86,7 +86,7 @@ function Phrase(props){
       intervalRef.current = null
     }
   }, [])
-  
+
   return(
     <p className={styles.phrase} style={{transform: 'translateX(' + coordsState[0] + 'px) translateY(' + coordsState[1] + 'px)'}} ref={phraseRef}>
         {typeof props.currentPhrase == 'function' ? props.currentPhrase({cps: props.cps, prettyCookies: props.prettyCookies}) : props.currentPhrase}

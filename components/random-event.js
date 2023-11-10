@@ -4,7 +4,7 @@ This gather all the random events that can happen to the player
 */
 import React, { useState, useEffect, useRef } from "react";
 import styles from './random-event.module.scss';
-import { motion } from 'framer-motion';
+const { motion } = require('framer-motion');
 
 export default function RandomEvent({CPSTemporaryMultiplier, setCPSTemporaryMultiplier, goldenCookiecountdown, setGoldenCookiecountdown}) {
     const [showImage, setShowImage] = useState(false);
