@@ -91,7 +91,7 @@ export default function RandomEvent({CPSTemporaryMultiplier, setCPSTemporaryMult
               if(goldenCookiecountdown <= 0){
                 setShowImage(true);
                 showImageRef.current = true;
-                setCoords([Math.floor(Math.random() * window.innerWidth), Math.floor(Math.random() * window.innerHeight)])
+                setCoordsState([Math.floor(Math.random() * window.innerWidth), Math.floor(Math.random() * window.innerHeight)])
                 setTimeout(() => {
                     showImageRef.current = false;
                     setShowImage(false);
