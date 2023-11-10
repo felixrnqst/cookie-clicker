@@ -167,35 +167,39 @@ export default function Account ({accountPopup, setAccountPopup, storeState, set
             <button onClick={localClick}>Switch to local</button>
           </div>
           }
-          <div className={styles.float_child}>
-            <div className={styles.title}>
-              <h2>Start a new game :</h2>
+          <div className={styles.flexContainer}>
+            <div>
+              <div className={styles.title}>
+                <h2>Start a new game:</h2>
+              </div>
+              <h3>Your code :</h3>
+              <h4>( Note it for later ! )</h4>
+              <h2>{randomCode}</h2>
+              <button onClick={() => startNewSavedGame(storeState)}>Start</button>
             </div>
-            <h3>Your code :</h3>
-            <h4>( Note it for later ! )</h4>
-            <h2>{randomCode}</h2>
-            <button onClick={() => startNewSavedGame(storeState)}>Start</button>
-          </div>
 
-          <div className={styles.float_child}>
-            <div className={styles.title}>
-              <h2>Restart from your progress :</h2>
+            <div>
+              <div className={styles.title}>
+                <h2>Restart from your progress:</h2>
+              </div>
+              <h3>Session Code : </h3>
+              <div className={styles.inputRow}>
+                <input
+                  ref={codeRef}
+                  className={styles.code_input}
+                  placeholder="Session Code"
+                  onKeyUp={(event) => {
+                    if (event.key === 'Enter') {
+                      login(event.target.value.toString());
+                    }
+                  }}
+                />
+                <button onClick={() => login(codeRef.current.value.toString())}>Retrieve</button>
+              </div>
+              {loading && <p>Loading...</p>}
+              {!success && <p>{errorMessage}</p>}
+              {success && <p>Code is valid!</p>}
             </div>
-            <h3>Session Code : {<br/>}(0 is the basic one)</h3>
-            <input
-              ref={codeRef}
-              className={styles.code_input}
-              placeholder="Session Code"
-              onKeyUp={(event) => {
-                if (event.key === 'Enter') {
-                  login(event.target.value.toString());
-                }
-              }}
-            />
-            <button onClick={() => login(codeRef.current.value.toString())}>Retrieve</button>
-            {loading && <p>Loading...</p>}
-            {!success && <p>{errorMessage}</p>}
-            {success && <p>Code is valid!</p>}
           </div>
         </div>
       </div>

@@ -1,3 +1,5 @@
+@import '../styles/constants.scss';
+
 .popup {
     position: fixed;
     top: 0;
@@ -11,11 +13,14 @@
     align-items: center;
 }
 
+
+
 .popup_inner {
     border-radius: 2rem;
     position: fixed;
     padding: 1rem;
-    width: 50vw;
+    min-width: 50vw;
+    max-width: calc(100% - 2rem);
     // height: 30vw;
     background-color: #fff;
 }
@@ -44,22 +49,55 @@
 .popup_inner .popupfooter {
     flex: 20%;
     display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
 }
 
-.float_container {
-    border: 3px solid #fff;
-    padding: 20px;
+@include bp(md) {
+  .popup_inner .popupfooter {flex-direction: row; }
 }
 
-.float_child {
-    width: 50%;
-    float: right;
-    padding: 10px;
-    padding-right: 10px;
-    border: 2px solid red;
+.float_container {padding: 1rem; }
+
+.flexContainer {display: flex; flex-direction: column;
+  > *:first-child {border-bottom: 2px solid brown; }
+  > * {padding: .5rem; }
+  button {display: block; margin: auto; }
 }
+
+@include bp(md) {
+  .flexContainer {flex-direction: row;
+    > *:first-child {border-right: 2px solid brown; border-bottom: none; }
+    > * {width: 50%; }
+  }
+
+}
+
+
+// .float_container {
+//     border: 3px solid #fff;
+//     padding: 20px;
+// }
+//
+// .float_child {
+//     width: 100%;
+//     padding: 10px;
+//     // border: 2px solid brown;
+//     margin-bottom: .5rem;
+// }
+//
+// .float-child:first-of-type {border-bottom: 2px solid brown; }
+//
+// @include bp(md) {
+//   .float_child {
+//       width: 50%;
+//       float: right;
+//       padding: 10px;
+//
+//   }
+//   .float-child:first-of-type {border-right: 2px solid brown; }
+// }
 
 .popup_inner .login_input {
     color: white;
@@ -78,7 +116,6 @@
 
 }
 
-.code_input {
-    justify-content: left;
-
+.inputRow {display: flex;
+  input {flex-grow: 1; width: 10.5rem; }
 }

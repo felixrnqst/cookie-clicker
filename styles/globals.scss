@@ -16,7 +16,8 @@ a {
   font-family: Minecraft;
 }
 
-h3 {text-align: center; text-shadow: 1px 1px #000A;}
+h3 {text-shadow: 1px 1px #000A;}
+h2, h3, h4 {text-align: center; }
 
 @media (prefers-color-scheme: dark) {//Dark mode support
   html {
