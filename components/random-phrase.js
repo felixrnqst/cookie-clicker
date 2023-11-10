@@ -23,7 +23,7 @@ export default function RandomPhrase({phrases, cps, prettyCookies}) {
             setRandomIndex(newRandomIndex);
         }, phraseChangeDuration*1000);
         return () => clearInterval(interval);
-    }, [phrases]);
+    }, []);
 
     return (
       <div className={styles.container} ref={containerRef}>

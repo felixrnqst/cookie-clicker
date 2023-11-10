@@ -74,7 +74,7 @@ export default function RandomEvent({CPSTemporaryMultiplier, setCPSTemporaryMult
           const randomAppearance = Math.floor(Math.random() * 15) + 5; //Between 5 and 15s
           setShowImage(true);
           showImageRef.current = true;
-          setCoords([Math.floor(Math.random() * window.innerWidth), Math.floor(Math.random() * window.innerHeight)])
+          setCoordsState([Math.floor(Math.random() * window.innerWidth), Math.floor(Math.random() * window.innerHeight)])
           console.log("Showing image")
           setTimeout(() => {
               console.log("Hiding image")
